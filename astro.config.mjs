@@ -9,7 +9,7 @@ import react from "@astrojs/react";
 // https://astro.build/config
 export default defineConfig({
   output: "static",
-  site: 'https://webtaller.github.io',
+  site: 'https://jaime02.github.io',
   base: 'WebTaller',
   integrations: [tailwind(), mdx(), react()],
 });
