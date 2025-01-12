@@ -10,5 +10,6 @@ import react from "@astrojs/react";
 export default defineConfig({
   output: "static",
   site: 'https://jaime02.github.io',
+  base: '/WebTaller/',
   integrations: [tailwind(), mdx(), react()],
 });
