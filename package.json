@@ -4,13 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build --base=/WebTaller/",
+    "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro",
-    "gh-pages": "astro build --base=/WebTaller/"
+    "astro": "astro"
   },
   "dependencies": {
-    "@astrojs/check": "^0.9.4",
     "@astrojs/mdx": "^4.0.5",
     "@astrojs/react": "^4.1.3",
     "@astrojs/tailwind": "^5.1.4",
