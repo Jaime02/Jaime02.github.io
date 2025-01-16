@@ -1,8 +1,14 @@
 ---
-import Welcome from '../components/Welcome';
-import Layout from '../layouts/Layout.astro';
+import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout>
-	<Welcome client:load />
+  <main class="flex flex-col gap-2 p-2 max-w-[800px]">
+    <h1>WebTaller</h1>
+    <div class="container">
+      <a href="/WebTaller/demo.html">
+        <button>View the demo</button>
+      </a>
+    </div>
+  </main>
 </Layout>
