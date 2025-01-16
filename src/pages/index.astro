@@ -1,14 +1,39 @@
 ---
-import Layout from "../layouts/Layout.astro";
+import Layout from "@/layouts/Layout.astro";
+import '@/globals.css';
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
 ---
 
 <Layout>
   <main class="flex flex-col gap-2 p-2 max-w-[800px]">
-    <h1>WebTaller</h1>
+    <h1>Resano Innovación</h1>
+
+    <p>{t("index.title.1")}<span>{t("index.title.2")}</span>{t("index.title.3")}</p>
+    <q>
+      El decoletaje designa la fabricación de piezas de revolución (tornillos, ejes, bulones...) mecanizando material en barra o en rollo por arranque de viruta mediante una herramienta de corte y para una fabricación en serie (ya sea en lotes pequeños, medianos o grandes).
+      Screw machining refers to the manufacturing of parts of revolution (screws, shafts, bolts...) by machining bar or roll material by chip removal using a cutting tool for series production.
+    </q>
     <div class="container">
       <a href="/WebTaller/demo.html">
-        <button>View the demo</button>
+        <button class="btn-primary btn-demo drop-shadow-lg text-3xl px-4 py-2">View the demo</button>
       </a>
     </div>
   </main>
+  <style>
+    .btn-demo {
+      text-shadow:
+        1px 1px 1px #919191,
+        1px 2px 1px #919191,
+        1px 3px 1px #919191,
+        1px 4px 1px #919191,
+        1px 5px 1px #919191,
+        1px 6px 1px #919191,
+        1px 7px 1px #919191,
+        1px 18px 6px rgba(16, 16, 16, 0.4),
+        1px 22px 10px rgba(16, 16, 16, 0.2);
+    }
+  </style>
 </Layout>

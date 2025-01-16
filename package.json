@@ -11,6 +11,7 @@
   "dependencies": {
     "@astrojs/react": "^4.1.5",
     "@astrojs/tailwind": "^5.1.4",
+    "@fontsource/titillium-web": "^5.1.1",
     "@react-three/drei": "^9.121.1",
     "@react-three/fiber": "^8.17.12",
     "@tresjs/core": "^4.3.2",
@@ -20,6 +21,7 @@
     "astro": "^5.1.7",
     "prettier": "^3.4.2",
     "prettier-plugin-astro": "^0.14.1",
+    "prettier-plugin-tailwindcss": "^0.6.10",
     "react": "^18.3.0",
     "react-dom": "^18.3.0",
     "tailwindcss": "^3.4.17",
