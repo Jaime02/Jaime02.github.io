@@ -1,0 +1,29 @@
+---
+import "@/globals.css";
+import Layout from "@/layouts/Layout.astro";
+import { getTranslationsFromUrl } from "@/i18n/translations";
+
+export function getStaticPaths() {
+  return [{ params: { lang: undefined } }, { params: { lang: "en" } }, { params: { lang: "es" } }];
+}
+
+const t = getTranslationsFromUrl(Astro.url);
+---
+
+<Layout>
+  <main class="flex flex-col gap-2 p-4 h-full grow">
+    <h3>Ubicación:</h3>
+    <h3>Polígono industrial El Escopar - Calle B - Nº 28 - 31350 - Peralta (Navarra)</h3>
+    <p style="text-align: justify; font-size: 1.2em;">
+      Estamos situados en Peralta, localidad que se encuentra en la parte sur de la Comunidad Foral de Navarra. Limita al norte con Falces, al este con Marcilla, al sur con Funes y
+      al oeste con Azagra, San Adrián y Andosilla.
+    </p>
+
+    <div style="width: 100%; height: 75vh; margin-top: 2%;">
+      <iframe
+        src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11798.220437693128!2d-1.827192520211255!3d42.33068694883425!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x8bde2379da86f24!2sDecoletajes%20Resano%20S.L.!5e0!3m2!1ses!2ses!4v1613259126083!5m2!1ses!2ses"
+        style="border: 2px solid lightgray; width: 100%; height: 100%;"
+        aria-hidden="false"></iframe>
+    </div>
+  </main>
+</Layout>

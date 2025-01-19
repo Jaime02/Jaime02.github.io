@@ -16,13 +16,13 @@ export function getStaticPaths() {
 ---
 
 <Layout>
-  <main class="flex flex-row gap-4 p-6 flex-wrap xl:flex-nowrap items-center justify-center">
+  <main class="flex flex-row gap-4 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
     <div class="grow">
       <Image src={imgFacade} alt="Facade" width={2275} height={1018} class="rounded-lg shadow-2xl shadow-slate-800 w-full mx-auto object-contain" />
     </div>
     <div class="flex flex-col items-center justify-center shadow-2xl shadow-slate-800 gap-4 p-6 bg-gradient-to-b from-[#020651] to-[#020878] rounded-lg min-w-fit">
       <h1 class="text-2xl sm:text-3xl text-center text-balance">
-        {t("index.title.1")}<span class="text-primary font-bold"> {t("index.title.2")}</span>{t("index.title.3")}
+        {t("index.title.1")}<span class="text-[#3377ff] font-bold"> {t("index.title.2")}</span>{t("index.title.3")}
       </h1>
       <div class="text-center">
         <p class="text-left max-w-[500px] text-md sm:text-lg">

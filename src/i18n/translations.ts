@@ -5,9 +5,12 @@ export const languages = {
 
 export const defaultLang = "en";
 
-export const ui = {
+export const translations = {
   en: {
     "navbar.home": "Home",
+    "navbar.openMenu": "Open menu",
+    "navbar.location": "Location",
+    "navbar.contact": "Contact",
     "index.title.1": "We are ",
     "index.title.2": "CNC bar turning",
     "index.title.3": " experts",
@@ -22,6 +25,9 @@ export const ui = {
   },
   es: {
     "navbar.home": "Inicio",
+    "navbar.openMenu": "Abrir menú",
+    "navbar.location": "Ubicación",
+    "navbar.contact": "Contacto",
     "index.title.1": "Somos expertos en ",
     "index.title.2": "Decoletaje CNC y Mecanizado",
     "index.title.3": "",
@@ -38,19 +44,29 @@ export const ui = {
 
 export function getLangFromUrl(url: URL) {
   const [, lang] = url.pathname.split("/");
-  if (lang in ui) return lang as keyof typeof ui;
+  if (lang in translations) return lang as keyof typeof translations;
   return defaultLang;
 }
 
-export function useTranslations(lang: keyof typeof ui): (key: keyof (typeof ui)[typeof defaultLang]) => string {
-  return function t(key: keyof (typeof ui)[typeof defaultLang]): string {
-    const possibleT = ui[lang][key];
+export function useTranslations(lang: keyof typeof translations): (key: keyof (typeof translations)[typeof defaultLang]) => string {
+  return function t(key: keyof (typeof translations)[typeof defaultLang]): string {
+    const possibleT = translations[lang][key];
     if (possibleT === "") return "";
-    return possibleT || ui[defaultLang][key]
+    return possibleT || translations[defaultLang][key]
   };
 }
 
-export function getTranslationsFromUrl(url: URL): (key: keyof (typeof ui)[typeof defaultLang]) => string {
+export function getTranslationsFromUrl(url: URL): (key: keyof (typeof translations)[typeof defaultLang]) => string {
   const lang = getLangFromUrl(url);
   return useTranslations(lang);
+}
+
+export function getUrlWithoutLocale(url: URL): string {
+  for (const locale of Object.keys(languages)) {
+    if (url.pathname.startsWith(`/${locale}/`)) {
+      return url.pathname.replace(`/${locale}/`, "/");
+    }
+  }
+
+  return url.pathname;
 }
