@@ -1,4 +1,4 @@
-@import "@fontsource/titillium-web";
+@import "@fontsource-variable/montserrat";
 
 @tailwind base;
 @tailwind components;
@@ -61,9 +61,9 @@
   }
 
   body {
-    font-family: "Titillium Web", sans-serif;
+    font-family: "Montserrat Variable", sans-serif;
     interpolate-size: allow-keywords;
-    @apply bg-background text-foreground;
+    @apply text-foreground;
   }
 }
 
@@ -95,14 +95,5 @@
 
   .styled-a {
     @apply underline hover:text-blue-800 dark:hover:text-blue-500;
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-  body {
-    @apply bg-background text-foreground;
   }
 }

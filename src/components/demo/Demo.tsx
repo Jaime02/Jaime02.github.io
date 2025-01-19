@@ -1,6 +1,5 @@
-import { Suspense, useEffect, useRef } from "react";
+import { Suspense, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import { useGLTF, CameraControls } from "@react-three/drei";
 import FullScreenButton from "@/components/demo/FullScreenButton";
 import LoadingScreen from "@/components/demo/LoadingScreen";
 import { SceneContextProvider, useSceneContext } from "@/components/demo/SceneContext";
@@ -29,15 +28,13 @@ export default function DemoComponent() {
       className="aspect-video max-w-full max-h-[90vh] relative"
     >
       <Suspense fallback={<LoadingScreen />}>
-        <Canvas gl={{ antialias: true }} className="max-w-full">
+        <Canvas gl={{ antialias: true }} className="max-w-full rounded-md">
           <SceneContextProvider>
             <Scene />
           </SceneContextProvider>
         </Canvas>
+        <FullScreenButton refDemo={refDemo} />
       </Suspense>
-      <FullScreenButton refDemo={refDemo} />
     </div>
   );
 }
-
-useGLTF.preload("/WebTaller/blender/ABX.glb");

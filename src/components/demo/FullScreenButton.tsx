@@ -1,17 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipProvider,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 import { Button } from "@/components/ui/button";
+import IconCloseFullscreen from "@/img/IconCloseFullscreen";
+import IconOpenFullscreen from "@/img/IconOpenFullscreen";
+import { getTranslationsFromUrl } from "@/i18n/translations";
 
-export default function FullScreenButton({
-  refDemo,
-}: {
-  refDemo: React.RefObject<HTMLDivElement | null>;
-}) {
+export default function FullscreenButton({ refDemo }: { refDemo: React.RefObject<HTMLDivElement | null> }) {
+  const t = getTranslationsFromUrl(new URL(window.location.href));
+  
   useEffect(() => {
     const handleFullscreenChange = () => {
       setIsFullscreen(!!document.fullscreenElement);
@@ -26,10 +22,6 @@ export default function FullScreenButton({
 
   const [isFullscreen, setIsFullscreen] = useState(false);
 
-  const fullscreenButtonSource = isFullscreen
-    ? "/WebTaller/img/CloseFullscreen.svg"
-    : "/WebTaller/img/OpenFullscreen.svg";
-
   const toggleFullscreen = useCallback(() => {
     if (!document.fullscreenElement) {
       refDemo.current?.requestFullscreen();
@@ -42,19 +34,12 @@ export default function FullScreenButton({
     <TooltipProvider>
       <Tooltip>
         <TooltipTrigger asChild>
-          <Button
-            onClick={toggleFullscreen}
-            className="absolute top-2 right-2 bg-white rounded-md"
-          >
-            <img
-              className="size-8"
-              src={fullscreenButtonSource}
-              alt="Toggle fullscreen"
-            />
+          <Button size="icon" onClick={toggleFullscreen} className="absolute bg-[rgba(0,0,0,0.5)] text-white top-2 right-2 rounded-md">
+            {isFullscreen ? <IconCloseFullscreen extraClasses="size-8"/> : <IconOpenFullscreen extraClasses="size-8"/>}
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          <p>Toggle fullscreen</p>
+          {isFullscreen ? t("fullscreenButton.exitFullscreen") : t("fullscreenButton.enterFullscreen")}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>

@@ -1,20 +1,23 @@
 ---
-import Navbar from "@/components/Navbar";
+import Navbar from "@/components/ui/Navbar.astro";
+import { getLangFromUrl, useTranslations } from "@/i18n/translations";
+
+const lang = getLangFromUrl(Astro.url);
 ---
 
-<!doctype html>
-<html lang="en">
-	<head>
-		<meta charset="UTF-8" />
-		<meta name="viewport" content="width=device-width" />
-		<link rel="icon" type="image/svg+xml" href="/WebTaller/favicon.svg" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Prueba</title>
-	</head>
-	<body class="min-h-dvh flex flex-col">
-		<header>
-			<Navbar />
-		</header>
-		<slot />
-	</body>
+<html {lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Resano Innovación</title>
+  </head>
+  <body class="relative">
+    <div
+      class="fixed top-0 bottom-0 z-[-2] min-h-screen w-full bg-neutral-900 bg-[radial-gradient(ellipse_at_50%_40%,rgba(30,20,120,0.4),rgba(255,255,255,0))]">
+    </div>
+    <Navbar />
+    <slot />
+  </body>
 </html>

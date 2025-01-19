@@ -47,13 +47,6 @@ export default {
 					'5': 'hsl(var(--chart-5))'
 				}
 			},
-			fontFamily: {
-				comic: [
-					'Comic Sans MS"',
-					'Comic Sans',
-					'cursive'
-				]
-			},
 			borderRadius: {
 				lg: 'var(--radius)',
 				md: 'calc(var(--radius) - 2px)',

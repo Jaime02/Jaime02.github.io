@@ -1,0 +1,28 @@
+---
+import { Astronav, MenuItems, MenuIcon } from "astro-navbar";
+import LogoResano from "@/components/ui/LogoResano";
+import { getLangFromUrl, useTranslations } from "@/i18n/translations";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<header class="md:flex p-4 gap-4 sticky top-0 bg-background">
+  <Astronav>
+    <div class="flex w-full justify-between">
+      <LogoResano extraClasses="h-14" />
+      <MenuIcon class="size-12 text-foreground block md:hidden border border-foreground rounded-md p-2" />
+    </div>
+    <MenuItems class="hidden md:flex">
+      <ul class="flex flex-col md:flex-row gap-4 p-4 text-right">
+        <li>
+          <a href={getRelativeLocaleUrl(lang, "")}>
+            {t("navbar.home")}
+          </a>
+        </li>
+        <li><a href={getRelativeLocaleUrl(lang, "demo")}>Demo</a></li>
+      </ul>
+    </MenuItems>
+  </Astronav>
+</header>

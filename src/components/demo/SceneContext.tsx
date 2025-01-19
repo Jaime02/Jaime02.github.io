@@ -11,6 +11,7 @@ import { useGLTF, useAnimations, CameraControls } from "@react-three/drei";
 import * as THREE from "three";
 import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
+import { getTranslationsFromUrl } from "@/i18n/translations";
 
 class CameraPosition {
   position: THREE.Vector3;
@@ -87,7 +88,7 @@ function HtmlComponent() {
   return (
     <Html position={[2, 1.2, 1.2]} transform>
       <div
-        className="flex flex-col font-comic gap-2 rounded-md p-2 bg-red-500"
+        className="flex flex-col gap-2 rounded-md p-2 bg-red-500"
         onPointerDown={(e) => e.stopPropagation()}
       >
         <button
@@ -109,13 +110,15 @@ function HtmlComponent() {
 
 function WelcomeButton() {
   const { goToNextState } = useSceneContext();
+  const t = getTranslationsFromUrl(new URL(window.location.href));
+
   return (
     <Html position={[2, 1.2, 1.2]}>
       <button
         onClick={() => goToNextState()}
         className="bg-white text-black rounded-md px-2 py-1"
       >
-        Start
+        {t("demo.start")}
       </button>
     </Html>
   );
@@ -155,9 +158,9 @@ export function SceneContextProvider({
     nodes: machineNodes,
     materials: machineMaterials,
     animations: machineAnimations,
-  } = useGLTF("/WebTaller/blender/ABX.glb");
+  } = useGLTF("/blender/ABX.glb");
 
-  const { scene: factoryScene } = useGLTF("/WebTaller/blender/Factory.glb");
+  const { scene: factoryScene } = useGLTF("/blender/Factory.glb");
   const { actions } = useAnimations(machineAnimations, machineScene);
 
   const availableStatuses = useMemo(
@@ -249,3 +252,5 @@ export function useSceneContext() {
   }
   return context;
 }
+
+useGLTF.preload("/blender/ABX.glb");
