@@ -1,199 +1,92 @@
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from "react";
+import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useGLTF, useAnimations, CameraControls } from "@react-three/drei";
 import * as THREE from "three";
-import { Html } from "@react-three/drei";
-import { useFrame } from "@react-three/fiber";
 import { getTranslationsFromUrl } from "@/i18n/translations";
+import SignComponent from "./SignComponent";
+import { CameraState } from "./ControlledCamera";
 
-class CameraPosition {
-  position: THREE.Vector3;
-  target: THREE.Vector3;
+export type SceneContextType = {
+  machineScene: THREE.Group<THREE.Object3DEventMap>,
+  factoryScene: THREE.Group<THREE.Object3DEventMap>,
+  goToPreviousState: (() => void) | null,
+  goToNextState: (() => void) | null,
+  currentHtmlComponent: React.ReactNode,
+  cameraRef: React.RefObject<CameraControls | null>,
+  cameraState: CameraState,
+};
 
-  constructor(position: THREE.Vector3, target: THREE.Vector3) {
-    this.position = position;
-    this.target = target;
-  }
-}
+const SceneContext = createContext<SceneContextType>({} as SceneContextType);
 
-const SceneContext = createContext<any>({
-  machineScene: null,
-  factoryScene: null,
-  playAnimation: null,
-  goToNextState: null,
-  materials: null,
-  nodes: null,
-  animations: null,
-  currentHtmlComponent: null,
-});
-
-function ControlledCamera(
-  cameraPosition?: CameraPosition,
-  orbiting: boolean = false,
-  animated: boolean = true,
-) {
-  const ref = useRef<CameraControls>(null!);
-  if (cameraPosition) {
-    if (orbiting) {
-      const radius = 4;
-      const speed = 0.15;
-      const center = new THREE.Vector3(0, 1, 0);
-      const positionOffset = new THREE.Vector3(0, 1.4, 0);
-
-      useFrame(({ clock }) => {
-        const elapsedTime = clock.getElapsedTime();
-        const x = center.x + radius * Math.cos(elapsedTime * speed);
-        const z = center.z + radius * Math.sin(elapsedTime * speed);
-
-        // Update the camera's position
-        ref.current.setPosition(
-          x + positionOffset.x,
-          center.y + positionOffset.y,
-          z + positionOffset.z,
-          animated,
-        );
-
-        // Ensure the camera keeps looking at the center
-        ref.current.setTarget(center.x, center.y, center.z, animated);
-      });
-    } else {
-      ref.current.setPosition(
-        cameraPosition.position.x,
-        cameraPosition.position.y,
-        cameraPosition.position.z,
-        animated,
-      );
-      ref.current.setTarget(
-        cameraPosition.target.x,
-        cameraPosition.target.y,
-        cameraPosition.target.z,
-        animated,
-      );
-    }
-  }
-
-  return <CameraControls ref={ref} />;
-}
-
-function HtmlComponent() {
-  const { playAnimation } = useSceneContext();
-
-  return (
-    <Html position={[2, 1.2, 1.2]} transform>
-      <div
-        className="flex flex-col gap-2 rounded-md p-2 bg-red-500"
-        onPointerDown={(e) => e.stopPropagation()}
-      >
-        <button
-          onClick={() => playAnimation("Door")}
-          className="bg-white text-black rounded-md px-2 py-1"
-        >
-          Open door
-        </button>
-        <button
-          onClick={() => playAnimation("Door", { backwards: true })}
-          className="bg-white text-black rounded-md px-2 py-1"
-        >
-          Close door
-        </button>
-      </div>
-    </Html>
-  );
-}
-
-function WelcomeButton() {
-  const { goToNextState } = useSceneContext();
-  const t = getTranslationsFromUrl(new URL(window.location.href));
-
-  return (
-    <Html position={[2, 1.2, 1.2]}>
-      <button
-        onClick={() => goToNextState()}
-        className="bg-white text-black rounded-md px-2 py-1"
-      >
-        {t("demo.start")}
-      </button>
-    </Html>
-  );
+interface DemoStateProps {
+  name: string;
+  htmlElement?: React.ReactNode;
+  cameraState: CameraState;
 }
 
 class DemoState {
   name: string;
   htmlElement?: React.ReactNode;
-  cameraPosition?: CameraPosition;
-  constructor(
-    name: string,
-    htmlElement?: React.ReactNode,
-    cameraPosition?: CameraPosition,
-  ) {
+  cameraState: CameraState;
+  actions: any[];
+  constructor({ name, htmlElement, cameraState, actions }: DemoStateProps) {
     this.name = name;
     this.htmlElement = htmlElement;
-    this.cameraPosition = cameraPosition;
-  }
-
-  getCamera() {
-    return (
-      <ControlledCamera
-        cameraPosition={this.cameraPosition}
-        orbiting={this.name === "Welcome"}
-      />
-    );
+    this.cameraState = cameraState;
+    this.actions = actions;
   }
 }
 
-export function SceneContextProvider({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
-  const {
-    scene: machineScene,
-    nodes: machineNodes,
-    materials: machineMaterials,
-    animations: machineAnimations,
-  } = useGLTF("/blender/ABX.glb");
+export function SceneContextProvider({ children }: { children: React.ReactNode }) {
+  const t = getTranslationsFromUrl(new URL(window.location.href));
+
+  const cameraRef = useRef<CameraControls | null>(null);
+  const { scene: machineScene, nodes: machineNodes, materials: machineMaterials, animations: machineAnimations } = useGLTF("/blender/ABX.glb");
 
   const { scene: factoryScene } = useGLTF("/blender/Factory.glb");
   const { actions } = useAnimations(machineAnimations, machineScene);
 
-  const availableStatuses = useMemo(
-    () => [
-      new DemoState("Welcome", <WelcomeButton />),
-      new DemoState(
-        "OpenMachine",
-        null,
-        new CameraPosition(
-          new THREE.Vector3(0, 1.5, 0),
-          new THREE.Vector3(0, 1.5, 0),
-        ),
-      ),
-    ],
-    [],
-  );
+  const availableStatuses = [
+    new DemoState({
+      name: "Welcome",
+      htmlElement: <SignComponent text={t("demo.start")} position={new THREE.Vector3(0, 3, 0)} />,
+      cameraState: new CameraState({
+        position: new THREE.Vector3(0, 1.5, 0),
+        target: new THREE.Vector3(0, 1.5, 0),
+        orbiting: true,
+        animated: true,
+      }),
+    }),
+    new DemoState({
+      name: "OpenMachine",
+      cameraState: new CameraState({
+        position: new THREE.Vector3(-1, 1.6, 2),
+        target: new THREE.Vector3(0, 1.2, 0),
+        enableUserControls: true
+      }),
+      htmlElement: <SignComponent text="Segundo estado" position={new THREE.Vector3(0, 2.5, 0)} />,
+    }),
+  ];
 
   const [currentStateIndex, setCurrentStateIndex] = useState(0);
-  const currentState = availableStatuses[currentStateIndex];
+  const currentState = useMemo(() => availableStatuses[currentStateIndex], [currentStateIndex, availableStatuses]);
 
   const goToNextState = useCallback(() => {
     if (currentStateIndex === availableStatuses.length - 1) {
       console.warn("No more states to go to");
       return;
     }
-    console.log(`Going to next state ${currentStateIndex + 1}`);
     setCurrentStateIndex((prev) => prev + 1);
   }, [currentStateIndex, availableStatuses.length]);
 
-  const playAnimation = (
-    name: string,
-    options?: { loop?: boolean; backwards?: boolean },
-  ) => {
+  const goToPreviousState = useCallback(() => {
+    if (currentStateIndex === 0) {
+      console.warn("No more states to go to");
+      return;
+    }
+    setCurrentStateIndex((prev) => prev - 1);
+  }, [currentStateIndex]);
+
+  const playAnimation = (name: string, options?: { loop?: boolean; backwards?: boolean }) => {
     const action = actions[name];
     if (!action) {
       console.warn(`Animation "${name}" not found.`);
@@ -214,28 +107,19 @@ export function SceneContextProvider({
     }
   };
 
-  const cameraRef = useRef<CameraControls>(null);
-
-  useEffect(() => {
-    cameraRef.current?.setLookAt(-1.4, 2.5, 2.2, 0, 0.6, 0);
-  }, []);
-
-  const camera = useMemo(() => {
-    return <ControlledCamera />;
-  }, [currentState]);
+  const cameraState = useMemo(() => currentState.cameraState, [currentState]);
+  const currentHtmlComponent = useMemo(() => currentState.htmlElement, [currentState]);
 
   return (
     <SceneContext.Provider
       value={{
-        camera,
         machineScene,
         factoryScene,
-        playAnimation,
-        goToNextState,
-        materials: machineMaterials,
-        nodes: machineNodes,
-        animations: machineAnimations,
-        currentHtmlComponent: availableStatuses[currentStateIndex].htmlElement,
+        goToPreviousState: (currentStateIndex !== 0 ? goToPreviousState : null),
+        goToNextState: (currentStateIndex !== availableStatuses.length - 1 ? goToNextState : null),
+        currentHtmlComponent,
+        cameraRef,
+        cameraState,
       }}
     >
       {children}
@@ -243,12 +127,10 @@ export function SceneContextProvider({
   );
 }
 
-export function useSceneContext() {
+export function useSceneContext(): SceneContextType {
   const context = useContext(SceneContext);
-  if (context === undefined) {
-    throw new Error(
-      "useSceneContext must be used within a SceneContextProvider",
-    );
+  if (!context) {
+    throw new Error("useSceneContext must be used within a SceneContextProvider");
   }
   return context;
 }

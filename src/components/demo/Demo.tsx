@@ -3,9 +3,10 @@ import { Canvas } from "@react-three/fiber";
 import FullScreenButton from "@/components/demo/FullScreenButton";
 import LoadingScreen from "@/components/demo/LoadingScreen";
 import { SceneContextProvider, useSceneContext } from "@/components/demo/SceneContext";
+import {ControlledCamera} from "./ControlledCamera";
 
 function Scene() {
-  const {camera, machineScene, factoryScene, currentHtmlComponent} = useSceneContext();
+  const {cameraState, machineScene, factoryScene, currentHtmlComponent} = useSceneContext();
 
   return (
     <>
@@ -14,7 +15,7 @@ function Scene() {
       <primitive object={machineScene} />
       <primitive object={factoryScene} />
       {currentHtmlComponent}
-      {camera}
+      <ControlledCamera state={cameraState}/>
     </>
   );
 }
