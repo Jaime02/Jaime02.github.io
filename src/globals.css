@@ -69,28 +69,23 @@
 
 @layer components {
   .clickable {
-    @apply hover:ring-2 active:!brightness-[1.20] select-none cursor-pointer;
+    @apply hover:ring-2 hover:brightness-[1.1] active:!brightness-[1.2] select-none cursor-pointer;
   }
 
   .btn-base {
-    @apply clickable flex flex-row flex-nowrap items-center justify-center gap-2 text-nowrap rounded-lg px-4 py-2 font-semibold;
+    @apply clickable flex flex-row flex-nowrap items-center justify-center gap-2 text-nowrap rounded-lg px-4 py-2 font-semibold border border-black;
   }
 
   .btn-primary {
-    @apply btn-base bg-primary hover:brightness-105 text-white;
+    @apply btn-base bg-primary;
   }
 
   .btn-secondary {
-    @apply btn-base bg-secondary;
+    @apply btn-base bg-secondary text-black;
   }
 
   .btn-outline {
     @apply btn-base border border-gray-500;
-  }
-
-  .btn-shiny {
-    @apply animate-pulse bg-yellow-300 border-2 border-yellow-400 dark:bg-yellow-400 dark:border-yellow-600;
-    animation: scalePulse 1s ease-in-out infinite;
   }
 
   .styled-a {
