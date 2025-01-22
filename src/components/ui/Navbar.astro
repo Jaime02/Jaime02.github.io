@@ -26,7 +26,7 @@ const currentPage = getUrlWithoutLocale(Astro.url);
       aria-controls="navbar-sticky"
       aria-expanded="false"
     >
-      <span class="sr-only">{t("navbar.openMenu")}</span>
+      <span class="sr-only">{t("navbar", "openMenu")}</span>
       <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
         <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"></path>
       </svg>
@@ -35,14 +35,14 @@ const currentPage = getUrlWithoutLocale(Astro.url);
       <ul class="flex flex-col items-center gap-2 p-4 font-medium border border-gray-200 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:border-0 md:bg-slate-800">
         <li>
           <a href={getRelativeLocaleUrl(lang, "")} class={`${currentPage == "/" ? "underline pointer-events-none" : ""}`}>
-            {t("navbar.home")}
+            {t("navbar", "home")}
           </a>
         </li>
         <li>
-          <a href={getRelativeLocaleUrl(lang, "location")} class={`${currentPage == "/location/" ? "underline pointer-events-none" : ""}`}>{t("navbar.location")}</a>
+          <a href={getRelativeLocaleUrl(lang, "location")} class={`${currentPage == "/location/" ? "underline pointer-events-none" : ""}`}>{t("navbar", "location")}</a>
         </li>
         <li>
-          <a href={getRelativeLocaleUrl(lang, "contact")} class={`${currentPage == "/contact/" ? "underline pointer-events-none" : ""}`}>{t("navbar.contact")}</a>
+          <a href={getRelativeLocaleUrl(lang, "contact")} class={`${currentPage == "/contact/" ? "underline pointer-events-none" : ""}`}>{t("navbar", "contact")}</a>
         </li>
       </ul>
     </div>

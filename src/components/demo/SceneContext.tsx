@@ -11,7 +11,7 @@ import { useGLTF, useAnimations, CameraControls } from "@react-three/drei";
 import * as THREE from "three";
 import { Html } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
-import { getTranslationsFromUrl } from "@/i18n/translations";
+import { useTranslationsFromUrl } from "@/i18n/translations";
 
 class CameraPosition {
   position: THREE.Vector3;
@@ -110,7 +110,7 @@ function HtmlComponent() {
 
 function WelcomeButton() {
   const { goToNextState } = useSceneContext();
-  const t = getTranslationsFromUrl(new URL(window.location.href));
+  const t = useTranslationsFromUrl(new URL(window.location.href));
 
   return (
     <Html position={[2, 1.2, 1.2]}>
@@ -118,7 +118,7 @@ function WelcomeButton() {
         onClick={() => goToNextState()}
         className="bg-white text-black rounded-md px-2 py-1"
       >
-        {t("demo.start")}
+        {t("demo", "start")}
       </button>
     </Html>
   );

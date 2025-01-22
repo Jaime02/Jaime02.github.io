@@ -3,10 +3,10 @@ import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/comp
 import { Button } from "@/components/ui/button";
 import IconCloseFullscreen from "@/img/IconCloseFullscreen";
 import IconOpenFullscreen from "@/img/IconOpenFullscreen";
-import { getTranslationsFromUrl } from "@/i18n/translations";
+import { useTranslationsFromUrl } from "@/i18n/translations";
 
 export default function FullscreenButton({ refDemo }: { refDemo: React.RefObject<HTMLDivElement | null> }) {
-  const t = getTranslationsFromUrl(new URL(window.location.href));
+  const t = useTranslationsFromUrl(new URL(window.location.href));
   
   useEffect(() => {
     const handleFullscreenChange = () => {
@@ -39,7 +39,7 @@ export default function FullscreenButton({ refDemo }: { refDemo: React.RefObject
           </Button>
         </TooltipTrigger>
         <TooltipContent>
-          {isFullscreen ? t("fullscreenButton.exitFullscreen") : t("fullscreenButton.enterFullscreen")}
+          {isFullscreen ? t("fullscreenButton", "exitFullscreen") : t("fullscreenButton", "enterFullscreen")}
         </TooltipContent>
       </Tooltip>
     </TooltipProvider>
