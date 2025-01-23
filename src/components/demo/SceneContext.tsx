@@ -1,7 +1,7 @@
 import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
 import { useGLTF, useAnimations, CameraControls } from "@react-three/drei";
 import * as THREE from "three";
-import { getTranslationsFromUrl } from "@/i18n/translations";
+import { useTranslationsFromUrl } from "@/i18n/translations";
 import SignComponent from "./SignComponent";
 import { CameraState } from "./ControlledCamera";
 
@@ -27,17 +27,15 @@ class DemoState {
   name: string;
   htmlElement?: React.ReactNode;
   cameraState: CameraState;
-  actions: any[];
-  constructor({ name, htmlElement, cameraState, actions }: DemoStateProps) {
+  constructor({ name, htmlElement, cameraState }: DemoStateProps) {
     this.name = name;
     this.htmlElement = htmlElement;
     this.cameraState = cameraState;
-    this.actions = actions;
   }
 }
 
 export function SceneContextProvider({ children }: { children: React.ReactNode }) {
-  const t = getTranslationsFromUrl(new URL(window.location.href));
+  const t = useTranslationsFromUrl(new URL(window.location.href));
 
   const cameraRef = useRef<CameraControls | null>(null);
   const { scene: machineScene, nodes: machineNodes, materials: machineMaterials, animations: machineAnimations } = useGLTF("/blender/ABX.glb");

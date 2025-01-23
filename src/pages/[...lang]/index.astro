@@ -11,7 +11,7 @@ const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
 
 export function getStaticPaths() {
-  return [{ params: {lang: undefined} }, { params: { lang: "en" } }, { params: { lang: "es" } }];
+  return [{ params: { lang: undefined } }, { params: { lang: "en" } }, { params: { lang: "es" } }];
 }
 ---
 
@@ -20,19 +20,21 @@ export function getStaticPaths() {
     <div class="grow">
       <Image src={imgFacade} alt="Facade" width={2275} height={1018} class="rounded-lg shadow-2xl shadow-slate-800 w-full mx-auto object-contain" />
     </div>
-    <div class="flex flex-col items-center justify-center shadow-2xl shadow-slate-800 gap-4 p-6 bg-gradient-to-b from-[#020651] to-[#020878] rounded-lg min-w-fit">
+    <div
+      class="flex flex-col items-center justify-center shadow-[hsla(var(--primary)/0.2)_0_0_30px_10px] gap-4 p-6 bg-gradient-to-b from-[#020651] to-[#020878] rounded-2xl min-w-fit"
+    >
       <h1 class="text-2xl sm:text-3xl text-center text-balance">
-        {t("index.title.1")}<span class="text-[#3377ff] font-bold"> {t("index.title.2")}</span>{t("index.title.3")}
+        {t("index", "title1")}<span class="text-[#3377ff] font-bold"> {t("index", "title2")}</span>{t("index", "title3")}
       </h1>
       <div class="text-center">
         <p class="text-left max-w-[500px] text-md sm:text-lg">
-          {t("index.definition")}
+          {t("index", "definition")}
         </p>
       </div>
       <div class="flex flex-row items-baseline flex-wrap gap-4 justify-center text-xl sm:text-2xl">
-        <p>{t("index.question")}</p>
+        <p>{t("index", "question")}</p>
         <a class="btn-demo font-bold rounded-xl px-4 py-2 sm:px-8 sm:py-4 inline-flex flex-row" href={getRelativeLocaleUrl(lang, "demo")}>
-          <button class="tracking-widest">{t("index.viewDemo")} </button>
+          <button class="tracking-widest">{t("index", "viewDemo")} </button>
           <ArrowForward extraClasses="inline-block size-8 ml-2 text-white" />
         </a>
       </div>

@@ -1,6 +1,8 @@
 ---
 import Navbar from "@/components/ui/Navbar.astro";
 import { getLangFromUrl } from "@/i18n/translations";
+import { ClientRouter } from 'astro:transitions';
+
 const lang = getLangFromUrl(Astro.url);
 ---
 
@@ -19,10 +21,11 @@ const lang = getLangFromUrl(Astro.url);
     <title>Resano Innovación</title>
 
     <script is:inline src="/flowbite.min.js"></script>
+    <ClientRouter />
   </head>
-  <body class="relative">
+  <body class="relative flex flex-col min-h-screen">
     <div
-      class="fixed top-0 bottom-0 z-[-2] min-h-screen w-full bg-neutral-900 bg-[radial-gradient(ellipse_at_50%_40%,rgba(30,20,120,0.4),rgba(255,255,255,0))]">
+      class="fixed top-0 left-0 bottom-0 right-0 z-[-2] bg-neutral-900 bg-[radial-gradient(ellipse_at_50%_40%,rgba(30,20,120,0.4),rgba(255,255,255,0))]">
     </div>
     <Navbar />
     <slot />
