@@ -1,0 +1,17 @@
+---
+import "@/globals.css";
+import Layout from "@/layouts/Layout.astro";
+import { useTranslationsFromUrl } from "@/i18n/translations";
+
+export function getStaticPaths() {
+  return [{ params: { lang: undefined } }, { params: { lang: "en" } }, { params: { lang: "es" } }];
+}
+
+const t = useTranslationsFromUrl(Astro.url);
+---
+
+<Layout>
+  <main class="flex flex-col gap-2 p-4 h-full grow">
+    <h1>{t("contact", "title")}</h1>
+  </main>
+</Layout>

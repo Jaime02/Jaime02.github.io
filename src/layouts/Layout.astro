@@ -1,0 +1,33 @@
+---
+import Navbar from "@/components/ui/Navbar.astro";
+import { getLangFromUrl } from "@/i18n/translations";
+import { ClientRouter } from 'astro:transitions';
+
+const lang = getLangFromUrl(Astro.url);
+---
+
+<html {lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+
+    <link rel="icon" type="image/png" href="/favicon/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/svg+xml" href="/favicon/favicon.svg" />
+    <link rel="shortcut icon" href="/favicon/favicon.ico" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/favicon/apple-touch-icon.png" />
+
+    <link rel="manifest" href="/site.webmanifest" />
+    <meta name="generator" content={Astro.generator} />
+    <title>Resano Innovación</title>
+
+    <script is:inline src="/flowbite.min.js"></script>
+    <ClientRouter />
+  </head>
+  <body class="relative flex flex-col min-h-screen">
+    <div
+      class="fixed top-0 left-0 bottom-0 right-0 z-[-2] bg-neutral-900 bg-[radial-gradient(ellipse_at_50%_40%,rgba(30,20,120,0.4),rgba(255,255,255,0))]">
+    </div>
+    <Navbar />
+    <slot />
+  </body>
+</html>

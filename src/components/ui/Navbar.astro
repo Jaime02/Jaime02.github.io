@@ -1,0 +1,50 @@
+---
+import LogoResano from "@/components/ui/LogoResano";
+import { getLangFromUrl, useTranslations, getUrlWithoutLocale } from "@/i18n/translations";
+import { getRelativeLocaleUrl } from "astro:i18n";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const currentPage = getUrlWithoutLocale(Astro.url);
+---
+
+<nav class="bg-background sticky w-full z-20 top-0 start-0 border-b border-black">
+  <div class="max-w-screen-xl flex flex-wrap gap-4 items-center justify-between mx-auto p-4">
+    <a href={getRelativeLocaleUrl(lang, "")} class="inline-flex justify-between mr-auto">
+      <LogoResano extraClasses="h-14" />
+    </a>
+    {
+      currentPage != "/demo/" && (
+        <a href={getRelativeLocaleUrl(lang, "demo")} class="btn-primary">
+          <button>Demo</button>
+        </a>
+      )
+    }
+    <button
+      data-collapse-toggle="navbar-sticky"
+      class="inline-flex items-center outline outline-gray-200 p-2 justify-center text-sm text-gray-200 rounded-md md:hidden"
+      aria-controls="navbar-sticky"
+      aria-expanded="false"
+    >
+      <span class="sr-only">{t("navbar", "openMenu")}</span>
+      <svg class="size-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+        <path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M1 1h15M1 7h15M1 13h15"></path>
+      </svg>
+    </button>
+    <div class="items-center justify-between hidden w-full md:flex md:w-auto" id="navbar-sticky">
+      <ul class="flex flex-col items-center gap-2 p-4 font-medium border border-gray-200 rounded-lg md:space-x-8 rtl:space-x-reverse md:flex-row md:border-0 md:bg-slate-800">
+        <li>
+          <a href={getRelativeLocaleUrl(lang, "")} class={`${currentPage == "/" ? "underline pointer-events-none" : ""}`}>
+            {t("navbar", "home")}
+          </a>
+        </li>
+        <li>
+          <a href={getRelativeLocaleUrl(lang, "location")} class={`${currentPage == "/location/" ? "underline pointer-events-none" : ""}`}>{t("navbar", "location")}</a>
+        </li>
+        <li>
+          <a href={getRelativeLocaleUrl(lang, "contact")} class={`${currentPage == "/contact/" ? "underline pointer-events-none" : ""}`}>{t("navbar", "contact")}</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
