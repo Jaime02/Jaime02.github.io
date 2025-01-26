@@ -1,7 +1,7 @@
 ---
 import "@/globals.css";
 import Layout from "@/layouts/Layout.astro";
-import DemoComponent from "@/components/demo/Demo";
+// import DemoComponent from "@/components/demo/Demo";
 import { useTranslationsFromUrl } from "@/i18n/translations";
 
 export function getStaticPaths() {
@@ -14,6 +14,6 @@ const t = useTranslationsFromUrl(Astro.url);
 <Layout>
   <main class="flex flex-col gap-2 p-4 h-full grow">
     <h1 class="font-bold text-center p-2 text-xl bg-black text-white rounded-md w-fit mx-auto">{t("demo", "title")}</h1>
-    <DemoComponent client:only="react" />
+    <!-- <DemoComponent client:only="react" />  -->
   </main>
 </Layout>

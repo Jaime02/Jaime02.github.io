@@ -16,14 +16,14 @@ export function getStaticPaths() {
 ---
 
 <Layout>
-  <main class="flex flex-row gap-4 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
+  <main class="flex flex-row gap-6 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
     <div class="grow">
-      <Image src={imgFacade} alt="Facade" width={2275} height={1018} class="rounded-lg shadow-2xl shadow-slate-800 w-full mx-auto object-contain" />
+      <Image src={imgFacade} alt="Facade" width={2275} height={1018} class="rounded-lg shadow-base w-full mx-auto object-contain lg:max-w-screen-xl" />
     </div>
     <div
-      class="flex flex-col items-center justify-center shadow-[hsla(var(--primary)/0.2)_0_0_30px_10px] gap-4 p-6 bg-gradient-to-b from-[#020651] to-[#020878] rounded-2xl min-w-fit"
+      class="flex text-white flex-col items-center justify-center shadow-base gap-4 p-6 bg-gradient-to-b from-[#020651] to-[#020878] rounded-2xl"
     >
-      <h1 class="text-2xl sm:text-3xl text-center text-balance">
+      <h1 class="text-2xl sm:text-3xl text-center text-balance font-bold">
         {t("index", "title1")}<span class="text-[#3377ff] font-bold"> {t("index", "title2")}</span>{t("index", "title3")}
       </h1>
       <div class="text-center">
@@ -31,10 +31,10 @@ export function getStaticPaths() {
           {t("index", "definition")}
         </p>
       </div>
-      <div class="flex flex-row items-baseline flex-wrap gap-4 justify-center text-xl sm:text-2xl">
+      <div class="flex flex-row items-baseline flex-wrap gap-4 justify-center text-xl">
         <p>{t("index", "question")}</p>
-        <a class="btn-demo font-bold rounded-xl px-4 py-2 sm:px-8 sm:py-4 inline-flex flex-row" href={getRelativeLocaleUrl(lang, "demo")}>
-          <button class="tracking-widest">{t("index", "viewDemo")} </button>
+        <a class="btn-demo font-bold rounded-xl px-4 py-2 sm:px-6 sm:py-4 inline-flex flex-row" href={getRelativeLocaleUrl(lang, "demo")}>
+          <button class="tracking-wider">{t("index", "viewDemo")} </button>
           <ArrowForward extraClasses="inline-block size-8 ml-2 text-white" />
         </a>
       </div>
@@ -61,8 +61,8 @@ export function getStaticPaths() {
     @keyframes pulse {
       50% {
         box-shadow:
-          inset 0 0 20px rgba(255, 255, 255, 0.4),
-          0 0 20px rgba(255, 255, 255, 0.7);
+          inset 0 0 20px rgba(255, 255, 255, 0.5),
+          0 0 20px rgba(255, 255, 255, 0.8);
       }
     }
   </style>

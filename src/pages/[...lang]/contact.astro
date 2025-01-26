@@ -12,6 +12,17 @@ const t = useTranslationsFromUrl(Astro.url);
 
 <Layout>
   <main class="flex flex-col gap-2 p-4 h-full grow">
-    <h1>{t("contact", "title")}</h1>
+    <h1 class="text-center text-2xl font-medium">{t("contact", "title")}</h1>
+    <form>
+      <label for="name" class="text-pretty">Nombre completo</label>
+      <input type="text" id="name" name="name" class="w-full rounded-md border-2 border-border p-2" />
+      <label for="email" class="text-pretty">Correo electrónico</label>
+      <input type="email" id="email" name="email" class="w-full rounded-md border-2 border-border p-2" />
+      <label for="subject" class="text-pretty">Asunto</label>
+      <input type="text" id="subject" name="subject" class="w-full rounded-md border-2 border-border p-2" />
+      <label for="message" class="text-pretty">Mensaje</label>
+      <textarea id="message" name="message" class="w-full rounded-md border-2 border-border p-2"></textarea>
+      <button class="btn-primary">Enviar</button>
+    </form>
   </main>
 </Layout>

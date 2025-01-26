@@ -9,10 +9,14 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/react": "^4.1.6",
     "@fontsource-variable/montserrat": "^5.1.1",
     "@tailwindcss/vite": "^4.0.0",
     "astro": "^5.1.9",
+    "flowbite": "^3.0.0",
     "prettier": "^3.4.2",
+    "react-dom": "^19.0.0",
+    "tailwind-merge": "^2.6.0",
     "tailwindcss": "^4.0.0",
     "vite-plugin-glsl": "^1.3.1"
   }

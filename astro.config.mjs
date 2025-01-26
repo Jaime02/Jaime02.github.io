@@ -3,7 +3,7 @@ import { defineConfig } from "astro/config";
 import tailwindcss from "@tailwindcss/vite";
 import { languages } from "./src/i18n/translations";
 import react from "@astrojs/react";
-import glsl from "vite-plugin-glsl";
+// import glsl from "vite-plugin-glsl";
 
 // https://astro.build/config
 export default defineConfig({
@@ -17,7 +17,7 @@ export default defineConfig({
     },
     vite: {
         plugins: [
-          glsl(),
+          // glsl(),
           tailwindcss(),
         ],
         build: {

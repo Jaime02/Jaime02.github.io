@@ -1,72 +1,82 @@
 @import "tailwindcss";
 @import "@fontsource-variable/montserrat";
 
+@plugin "flowbite/plugin";
+@source "../node_modules/flowbite";
+
 @theme {
-  --color-background: 0 0% 3.9%;
-  --color-foreground: 0 0% 98%;
-  --color-primary: 220 100% 60%;
-  --color-primary-foreground: 0 0% 98%;
-  --color-secondary: 0 0% 96.1%;
-  --color-secondary-foreground: 0 0% 9%;
-  --color-muted: 0 0% 96.1%;
-  --color-muted-foreground: 0 0% 45.1%;
-  --color-accent: 0 0% 96.1%;
-  --color-accent-foreground: 0 0% 9%;
-  --color-destructive: 0 84.2% 60.2%;
-  --color-destructive-foreground: 0 0% 98%;
-  --color-card: 0 0% 100%;
-  --color-card-foreground: 0 0% 3.9%;
-  --color-popover: 0 0% 100%;
-  --color-popover-foreground: 0 0% 3.9%;
-  --color-border: 0 0% 89.8%;
-  --color-input: 0 0% 89.8%;
-  --color-ring: 0 0% 3.9%;
+  --color-foreground: var(--theme-color-foreground);
+  --color-background: var(--theme-color-background);
+  --color-primary: var(--theme-color-primary);
+  --color-primary-foreground: var(--theme-color-primary);
+  --color-secondary: var(--theme-color-secondary);
+  --color-secondary-foreground: var(--theme-color-secondary-foreground);
+  --color-accent: var(--theme-color-accent);
+  --color-destructive: var(--theme-color-destructive);
+  --color-border: var(--theme-color-border);
+  --color-input: var(--theme-color-input);
+  --color-ring: var(--theme-color-ring);
   --radius: 0.5rem;
+  --shadow-base: var(--theme-shadow-base);
+  --color-rojo-resano: #da2a1e;
 }
 
-@variant dark {
-  --color-background: 0 0% 3.9%;
-  --color-foreground: 0 0% 98%;
-  --color-primary: 220 100% 60%;
-  --color-primary-foreground: 0 0% 98%;
-  --color-secondary: 0 0% 14.9%;
-  --color-secondary-foreground: 0 0% 98%;
-  --color-muted: 0 0% 14.9%;
-  --color-muted-foreground: 0 0% 63.9%;
-  --color-accent: 0 0% 14.9%;
-  --color-accent-foreground: 0 0% 98%;
-  --color-destructive: 0 62.8% 30.6%;
-  --color-destructive-foreground: 0 0% 98%;
-  --color-card: 0 0% 3.9%;
-  --color-card-foreground: 0 0% 98%;
-  --color-popover: 0 0% 3.9%;
-  --color-popover-foreground: 0 0% 98%;
-  --color-border: 0 0% 14.9%;
-  --color-input: 0 0% 14.9%;
-  --color-ring: 0 0% 83.1%;
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+@layer base {
+  [data-theme="light"] {
+    --theme-color-foreground: hsl(0 0% 8%);
+    --theme-color-background: hsl(0 0% 98%);
+    --theme-color-primary: hsl(237, 94%, 51%);
+    --theme-color-primary-foreground: hsl(0 0% 98%);
+    --theme-color-secondary: hsl(0 0% 96.1%);
+    --theme-color-secondary-foreground: hsl(0 0% 9%);
+    --theme-color-accent: hsl(0 0% 96.1%);
+    --theme-color-destructive: hsl(0 84.2% 60.2%);
+    --theme-color-border: hsl(0 0% 14.9%);
+    --theme-color-input: hsl(0 0% 89.8%);
+    --theme-color-ring: hsl(0 0% 3.9%);
+    --theme-shadow-base: 0 20px 25px -5px rgb(0, 0, 0, 0.3), 0 8px 10px -6px rgb(0, 0, 0, 0.6);
+  }
+
+  [data-theme="dark"] {
+    --theme-color-foreground: hsl(0 0% 98%);
+    --theme-color-background: hsl(0 0% 3.9%);
+    --theme-color-primary: hsl(237, 98%, 47%);
+    --theme-color-primary-foreground: hsl(0 0% 98%);
+    --theme-color-secondary: hsl(0 0% 14.9%);
+    --theme-color-secondary-foreground: hsl(0 0% 98%);
+    --theme-color-accent: hsl(0 0% 14.9%);
+    --theme-color-destructive: hsl(0 62.8% 30.6%);
+    --theme-color-destructive-foreground: hsl(0 0% 98%);
+    --theme-color-border: hsl(0 0% 14.9%);
+    --theme-color-input: hsl(0 0% 14.9%);
+    --theme-color-ring: hsl(0 0% 83.1%);
+    --theme-shadow-base: 0 0 30px 10px black;
+  }
 }
 
 body {
   font-family: "Montserrat Variable", sans-serif;
   interpolate-size: allow-keywords;
-  @apply text-foreground;
+  @apply text-foreground transition-colors duration-200;
 }
 
 @utility clickable {
-  @apply hover:ring-2 hover:brightness-[1.1] active:!brightness-[1.2] select-none cursor-pointer;
+  @apply hover:ring-1 hover:brightness-[1.2] active:!brightness-[1.4] select-none cursor-pointer;
 }
 
 @utility btn-base {
-  @apply clickable flex flex-row flex-nowrap items-center justify-center gap-2 text-nowrap rounded-lg px-4 py-2 font-semibold border border-black;
+  @apply clickable flex flex-row flex-nowrap items-center justify-center gap-2 text-nowrap rounded-lg px-4 py-2 font-semibold border border-border shadow-lg;
 }
 
 @layer components {
   .btn-primary {
-    @apply btn-base bg-primary;
+    @apply btn-base bg-primary text-white;
   }
 
   .btn-secondary {
-    @apply btn-base bg-secondary text-black;
+    @apply btn-base bg-secondary;
   }
 
   .btn-outline {

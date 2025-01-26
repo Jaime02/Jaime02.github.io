@@ -10,6 +10,6 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    "typeRoots": ["./types.d.ts"]
+    // "typeRoots": ["./types.d.ts"]
   }
 }

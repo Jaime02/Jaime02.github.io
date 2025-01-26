@@ -11,12 +11,13 @@ const t = useTranslationsFromUrl(Astro.url);
 ---
 
 <Layout>
-  <main class="flex flex-col gap-2 p-4 h-full grow">
-    <h1>{t("location", "title")}</h1>
-    <p>{t("location", "address")}</p>
-    <p>{t("location", "zipcode")}: 31350</p>
-    <p>{t("location", "city")}</p>
-    <p>{t("location", "description")}</p>
+  <main class="flex flex-col gap-2 p-4 h-full grow max-w-screen-xl">
+    <h1 class="text-center text-2xl font-medium">{t("location", "title")}</h1>
+    <section class="flex flex-col gap-2 mx-auto my-4 text-xl font-medium border-l px-2">
+      <p>{t("location", "address")}</p>
+      <p>{t("location", "zipcode")}: 31350. {t("location", "city")}</p>
+    </section>
+    <p class="text-pretty">{t("location", "description")}</p>
     <div class="w-full grow">
       <iframe
         src="https://www.google.com/maps/embed?pb=!1m14!1m8!1m3!1d11798.220437693128!2d-1.827192520211255!3d42.33068694883425!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x8bde2379da86f24!2sDecoletajes%20Resano%20S.L.!5e0!3m2!1ses!2ses!4v1613259126083!5m2!1ses!2ses"

@@ -51,8 +51,8 @@ export const translations = {
       contact: "Contacto"
     },
     index: {
-      title1: "Somos expertos en ",
-      title2: "Decoletaje CNC y Mecanizado",
+      title1: "Somos especialistas en ",
+      title2: "Decoletaje y Mecanizado CNC",
       title3: "",
       definition: "El decoletaje designa la fabricación de piezas de revolución (tornillos, ejes, bulones...) mecanizando material en barra o en rollo por arranque de viruta mediante una herramienta de corte y para una fabricación en serie.",
       question: "¿Quieres verlo?",
@@ -74,7 +74,7 @@ export const translations = {
       address: "Dirección: Polígono industrial El Escopar, Calle \"B\", 28",
       zipcode: "Código postal",
       city: "Peralta, Navarra",
-      description: "Estamos situados en Peralta, localidad que se encuentra en la zona sur de la Comunidad Foral de Navarra. Limita al norte con Falces, al este con Marcilla, al sur con Funes y al oeste con Azagra, San Adrián y Andosilla."
+      description: "Estamos situados en Peralta, localidad situada en la zona sur de la Comunidad Foral de Navarra. Limita al norte con Falces, al este con Marcilla, al sur con Funes y al oeste con Azagra, San Adrián y Andosilla."
     },
     contact: {
       title: "Contacto"
