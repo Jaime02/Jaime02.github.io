@@ -9,7 +9,7 @@ export default function EnglishFlag({ extraClasses }: { extraClasses: string }) 
       <rect width="60" height="40" fill="#00247d" />
       <g style={{stroke: "#ffffff", strokeWidth: 6.93225527, fill: "none"}}>
         <path d="M0,0L60,40M60,0L0,40" />
-        <path d="M0,0L60,30M60,0L0,30" style={{stroke: "#cf142b", strokeWidth: 4}} clip-path="url(#t)" transform="scale(1,1.3333333)" />
+        <path d="M0,0L60,30M60,0L0,30" style={{stroke: "#cf142b", strokeWidth: 4}} clipPath="url(#t)" transform="scale(1,1.3333333)" />
         <path d="M30,0V40M0,20H60" style={{strokeWidth: 11.55375878}} />
         <path d="M30,0V40M0,20H60" style={{stroke: "#cf142b"}} />
       </g>

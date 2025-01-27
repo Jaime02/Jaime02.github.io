@@ -19,13 +19,13 @@ const currentPage = getUrlWithoutLocale(Astro.url);
     {
       currentPage != "/demo/" && (
         <a href={getRelativeLocaleUrl(lang, "demo")} class="btn-primary">
-          <button>Demo</button>
+          Demo
         </a>
       )
     }
     <button
       data-collapse-toggle="navbar-sticky"
-      class="clickable inline-flex items-center outline outline-gray-200 p-2 justify-center text-sm text-gray-200 rounded-lg md:hidden"
+      class="btn-base inline-flex items-center p-2 justify-center text-sm text-gray-100 md:hidden"
       aria-controls="navbar-sticky"
       aria-expanded="false"
     >
@@ -48,16 +48,20 @@ const currentPage = getUrlWithoutLocale(Astro.url);
           <a href={getRelativeLocaleUrl(lang, "contact")} class={`${currentPage == "/contact/" ? "underline pointer-events-none" : ""}`}>{t("navbar", "contact")}</a>
         </li>
         <ThemeSelector client:only="react</a>" />
-        {Astro.url.pathname != getRelativeLocaleUrl("es", currentPage) && (
-          <a href={getRelativeLocaleUrl("es", currentPage)}>
-            <SpainFlag extraClasses="h-6 w-auto" />
-          </a>
-        )}
-        {Astro.url.pathname != getRelativeLocaleUrl("en", currentPage) && (
-        <a href={getRelativeLocaleUrl("en", currentPage)}>
-          <EnglishFlag extraClasses="h-6 w-auto" />
-        </a>
-        )}
+        {
+          Astro.url.pathname != getRelativeLocaleUrl("es", currentPage) && (
+            <a href={getRelativeLocaleUrl("es", currentPage)}>
+              <SpainFlag extraClasses="h-6 w-auto" />
+            </a>
+          )
+        }
+        {
+          Astro.url.pathname != getRelativeLocaleUrl("en", currentPage) && (
+            <a href={getRelativeLocaleUrl("en", currentPage)}>
+              <EnglishFlag extraClasses="h-6 w-auto" />
+            </a>
+          )
+        }
       </ul>
     </div>
   </div>
