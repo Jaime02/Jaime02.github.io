@@ -1,10 +1,10 @@
 ---
-import { getLangFromUrl, useTranslations } from "@/i18n/translations";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { Image } from "astro:assets";
-import imgFacade from "@/img/Facade.webp";
+import { getLangFromUrl, useTranslations } from "@/i18n/translations";
 import Layout from "@/layouts/Layout.astro";
 import ArrowForward from "@/img/IconArrowForward";
+import IndexCarousel from "@/components/index/IndexCarousel";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -17,7 +17,7 @@ export function getStaticPaths() {
 <Layout>
   <main class="flex flex-row gap-6 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
     <div class="grow">
-      <Image src={imgFacade} alt="Facade" width={2275} height={1018} class="rounded-lg shadow-base w-full mx-auto object-contain lg:max-w-screen-xl" />
+      <IndexCarousel client:only="react" />
     </div>
     <div
       class="flex text-white flex-col items-center justify-center shadow-base gap-4 p-6 bg-gradient-to-b from-[#020651] to-[#020878] rounded-2xl"

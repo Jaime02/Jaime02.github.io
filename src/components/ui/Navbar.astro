@@ -11,7 +11,7 @@ const t = useTranslations(lang);
 const currentPage = getUrlWithoutLocale(Astro.url);
 ---
 
-<nav class="bg-slate-900 sticky w-full z-20 top-0 start-0 border-b border-border">
+<nav class="bg-slate-900 shadow-xl sticky w-full z-20 top-0 start-0 border-b border-border">
   <div class="max-w-screen-xl flex flex-wrap gap-4 items-center justify-center mx-auto p-4">
     <a href={getRelativeLocaleUrl(lang, "")} class="inline-flex justify-between mr-auto">
       <LogoResano extraClasses="h-12 sm:h-14" />

@@ -22,8 +22,6 @@ const lang = getLangFromUrl(Astro.url);
     <title>Resano Innovación</title>
 
     <script src="../scripts/load-flowbite.js"></script>
-
-    </script>
     <ClientRouter />
   </head>
   <body class="relative flex flex-col min-h-screen items-center">
@@ -31,7 +29,6 @@ const lang = getLangFromUrl(Astro.url);
       class="fixed top-0 left-0 bottom-0 right-0 z-[-2] bg-white dark:bg-neutral-900 bg-radial-[at_50%_50%] dark:bg-radial-[at_50%_40%] dark:from-[rgba(30,20,120,0.4)] dark:to-[rgba(255,255,255,0)]"
     >
     </div>
-    <div class="fixed top-0 left-0 bottom-0 right-0 z-[-2] from-50% from-white to-[rgba(120,119,198,0.2)]"></div>
     <Navbar />
     <slot />
   </body>
