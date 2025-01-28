@@ -51,14 +51,14 @@ const currentPage = getUrlWithoutLocale(Astro.url);
         {
           Astro.url.pathname != getRelativeLocaleUrl("es", currentPage) && (
             <a href={getRelativeLocaleUrl("es", currentPage)}>
-              <SpainFlag extraClasses="h-6 w-auto" />
+              <SpainFlag extraClasses="h-6 w-auto rounded-sm" />
             </a>
           )
         }
         {
           Astro.url.pathname != getRelativeLocaleUrl("en", currentPage) && (
             <a href={getRelativeLocaleUrl("en", currentPage)}>
-              <EnglishFlag extraClasses="h-6 w-auto" />
+              <EnglishFlag extraClasses="h-6 w-auto rounded-sm" />
             </a>
           )
         }

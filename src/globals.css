@@ -1,4 +1,4 @@
-@import "tailwindcss";
+@import "tailwindcss" source("../");
 @import "@fontsource-variable/montserrat";
 
 @plugin "flowbite/plugin";
@@ -88,18 +88,15 @@ body {
   }
 
   .checkbox {
-    @apply clickable relative w-11 h-6 bg-gray-300 rounded-full peer-focus:ring-4 peer-focus:ring-primary dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary;
+    @apply clickable relative w-11 h-6 bg-gray-300 rounded-full peer-focus:ring-2 peer-focus:ring-primary dark:peer-focus:ring-white dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-primary;
   }
 
   .pulse {
     border: 1px solid;
     animation: 3s pulse-keyframes ease-in-out infinite;
     text-shadow:
-      2px 0 red,
-      2px 1px 1px red,
-      2px 2px 1px red,
-      1px 5px 8px rgba(16, 16, 16, 0.8),
-      1px 10px 12px rgba(16, 16, 16, 0.8);
+      1px 5px 8px rgba(16, 16, 16, 0.6),
+      1px 10px 12px rgba(16, 16, 16, 0.6);
   }
 
   @keyframes pulse-keyframes {

@@ -1,5 +1,4 @@
 ---
-import "@/globals.css";
 import { getLangFromUrl, useTranslations } from "@/i18n/translations";
 import { getRelativeLocaleUrl } from "astro:i18n";
 import { Image } from "astro:assets";
@@ -33,9 +32,9 @@ export function getStaticPaths() {
       </div>
       <div class="flex flex-row items-baseline flex-wrap gap-4 justify-center text-xl">
         <p>{t("index", "question")}</p>
-        <a class="btn-demo pulse clickable font-bold rounded-xl px-4 py-2 sm:px-6 sm:py-4 inline-flex flex-row" href={getRelativeLocaleUrl(lang, "demo")}>
-          <button class="tracking-wider">{t("index", "viewDemo")} </button>
-          <ArrowForward extraClasses="inline-block size-8 ml-2 text-white" />
+        <a class="btn-demo pulse clickable font-bold rounded-xl px-4 py-2 sm:px-6 sm:py-4 inline-flex flex-row gap-1" href={getRelativeLocaleUrl(lang, "demo")}>
+          <span class="tracking-wider">{t("index", "viewDemo")} </span>
+          <ArrowForward extraClasses="inline-block size-8 text-white" />
         </a>
       </div>
     </div>
