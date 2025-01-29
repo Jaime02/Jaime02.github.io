@@ -10,7 +10,7 @@ const t = useTranslationsFromUrl(Astro.url);
 ---
 
 <Layout>
-  <main class="flex flex-col gap-2 p-4 h-full grow max-w-screen-xl">
+  <div class="max-w-screen-xl">
     <h1 class="text-center text-2xl font-medium">{t("location", "title")}</h1>
     <section class="flex flex-col gap-2 mx-auto my-4 text-xl font-medium border-l-2 px-2">
       <p>{t("location", "address")}</p>
@@ -25,5 +25,5 @@ const t = useTranslationsFromUrl(Astro.url);
         allowfullscreen
         referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
-  </main>
+  </div>
 </Layout>
