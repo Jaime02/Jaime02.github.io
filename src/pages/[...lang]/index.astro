@@ -16,6 +16,9 @@ export function getStaticPaths() {
 ---
 
 <Layout>
+  <div class="w-[50%] aspect-square rounded-lg">
+    <PartExpositor client:only="react" modelUrl="/blender/PiezaGrupillaTexture.glb" />
+  </div>
   <div class="flex flex-row gap-6 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
     <div class="grow">
       <IndexCarousel client:only="react" />
@@ -40,5 +43,4 @@ export function getStaticPaths() {
       </div>
     </div>
   </div>
-  <PartExpositor client:only="react" modelUrl="/blender/PiezaGrupillaTexture.glb" />
 </Layout>
