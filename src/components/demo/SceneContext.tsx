@@ -1,17 +1,16 @@
-import { createContext, useCallback, useContext, useMemo, useRef, useState } from "react";
-import { useGLTF, useAnimations, CameraControls } from "@react-three/drei";
+import { createContext, useCallback, useContext, useMemo, useState } from "react";
+import { useGLTF, useAnimations } from "@react-three/drei";
 import * as THREE from "three";
 import { useTranslationsFromUrl } from "@/i18n/translations";
 import SignComponent from "./SignComponent";
-import { CameraState } from "./ControlledCamera";
+import { CameraState } from "@/components/three/ControlledCamera";
 
 export type SceneContextType = {
-  scene: THREE.Group<THREE.Object3DEventMap>,
-  goToPreviousState: (() => void) | null,
-  goToNextState: (() => void) | null,
-  currentHtmlComponent: React.ReactNode,
-  cameraRef: React.RefObject<CameraControls | null>,
-  cameraState: CameraState,
+  scene: THREE.Group<THREE.Object3DEventMap>;
+  goToPreviousState: (() => void) | null;
+  goToNextState: (() => void) | null;
+  currentHtmlComponent: React.ReactNode;
+  cameraState: CameraState;
 };
 
 const SceneContext = createContext<SceneContextType>({} as SceneContextType);
@@ -35,8 +34,6 @@ class DemoState {
 
 export function SceneContextProvider({ children }: { children: React.ReactNode }) {
   const t = useTranslationsFromUrl(new URL(window.location.href));
-
-  const cameraRef = useRef<CameraControls | null>(null);
   const { scene, nodes, materials, animations } = useGLTF("/blender/Scene.glb");
 
   const { actions } = useAnimations(animations, scene);
@@ -44,12 +41,11 @@ export function SceneContextProvider({ children }: { children: React.ReactNode }
   const availableStatuses = [
     new DemoState({
       name: "Welcome",
-      htmlElement: <SignComponent text={t("demo.start")} position={new THREE.Vector3(0, 3, 0)} />,
+      htmlElement: <SignComponent text={t("demo", "start")} position={new THREE.Vector3(0, 3, 0)} />,
       cameraState: new CameraState({
         position: new THREE.Vector3(0, 1.5, 0),
         target: new THREE.Vector3(0, 1.5, 0),
         orbiting: true,
-        animated: true,
       }),
     }),
     new DemoState({
@@ -57,7 +53,7 @@ export function SceneContextProvider({ children }: { children: React.ReactNode }
       cameraState: new CameraState({
         position: new THREE.Vector3(-1, 1.6, 2),
         target: new THREE.Vector3(0, 1.2, 0),
-        enableUserControls: true
+        enableUserControls: true,
       }),
       htmlElement: <SignComponent text="Segundo estado" position={new THREE.Vector3(0, 2.5, 0)} />,
     }),
@@ -110,10 +106,9 @@ export function SceneContextProvider({ children }: { children: React.ReactNode }
     <SceneContext.Provider
       value={{
         scene,
-        goToPreviousState: (currentStateIndex !== 0 ? goToPreviousState : null),
-        goToNextState: (currentStateIndex !== availableStatuses.length - 1 ? goToNextState : null),
+        goToPreviousState: currentStateIndex !== 0 ? goToPreviousState : null,
+        goToNextState: currentStateIndex !== availableStatuses.length - 1 ? goToNextState : null,
         currentHtmlComponent,
-        cameraRef,
         cameraState,
       }}
     >

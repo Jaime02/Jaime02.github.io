@@ -1,6 +1,5 @@
 ---
 import { getRelativeLocaleUrl } from "astro:i18n";
-import { Image } from "astro:assets";
 import { getLangFromUrl, useTranslations } from "@/i18n/translations";
 import Layout from "@/layouts/Layout.astro";
 import ArrowForward from "@/img/IconArrowForward";
@@ -16,10 +15,7 @@ export function getStaticPaths() {
 ---
 
 <Layout>
-  <div class="w-[50%] aspect-square rounded-lg">
-    <PartExpositor client:only="react" modelUrl="/blender/PiezaGrupillaTexture.glb" />
-  </div>
-  <div class="flex flex-row gap-6 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
+  <section class="flex flex-row gap-6 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
     <div class="grow">
       <IndexCarousel client:only="react" />
     </div>
@@ -42,5 +38,9 @@ export function getStaticPaths() {
         </a>
       </div>
     </div>
-  </div>
+  </section>
+  <section class="w-full rounded-lg p-4 flex flex-col gap-2 items-center justify-center">
+    <h1 class="">{t("index", "ourProducts")}</h1>
+    <PartExpositor client:only="react"/>
+  </section>
 </Layout>

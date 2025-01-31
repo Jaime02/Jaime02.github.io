@@ -1,9 +1,9 @@
 import { Suspense, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
-import FullScreenButton from "@/components/demo/FullScreenButton";
+// import FullScreenButton from "@/components/demo/FullScreenButton";
 import LoadingScreen from "@/components/demo/LoadingScreen";
 import { SceneContextProvider, useSceneContext } from "@/components/demo/SceneContext";
-import {ControlledCamera} from "./ControlledCamera";
+import { ControlledCamera } from "../three/ControlledCamera";
 
 function Scene() {
   const {cameraState, scene, currentHtmlComponent} = useSceneContext();
@@ -21,11 +21,12 @@ function Scene() {
 
 export default function DemoComponent() {
   const refDemo = useRef<HTMLDivElement>(null);
+  /* <FullScreenButton refDemo={refDemo} /> */
 
   return (
     <div
       ref={refDemo}
-      className="aspect-video max-w-full max-h-[90vh] relative"
+      className="aspect-video max-w-full max-h-[90vh] relative w-full"
     >
       <Suspense fallback={<LoadingScreen />}>
         <Canvas gl={{ antialias: true }} className="max-w-full rounded-md">
@@ -33,7 +34,6 @@ export default function DemoComponent() {
             <Scene />
           </SceneContextProvider>
         </Canvas>
-        <FullScreenButton refDemo={refDemo} />
       </Suspense>
     </div>
   );

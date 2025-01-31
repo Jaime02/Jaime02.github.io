@@ -1,76 +1,125 @@
-import { Suspense, useRef } from "react";
-import { Canvas, useFrame, useLoader, useThree } from "@react-three/fiber";
-import { Center, OrbitControls, useGLTF } from "@react-three/drei";
-import { TextureLoader, DirectionalLight, Matrix4, CubeTextureLoader } from "three";
+import { Suspense, useRef, useState } from "react";
+import { Canvas, useLoader } from "@react-three/fiber";
+import { ArcballControls, Center, useGLTF } from "@react-three/drei";
+import { TextureLoader, CubeTextureLoader, Vector3, CubeTexture } from "three";
+import { ErrorBoundary } from "react-error-boundary";
+import { CameraControls } from "@react-three/drei";
+import { CameraState, ControlledCamera } from "@/components/three/ControlledCamera";
 
-function Model({ url }: { url: string }) {
-  const { nodes } = useGLTF(url);
-  const [colorMap, metalMap, normalMap, roughnessMap] = useLoader(TextureLoader, [
-    "/blender/PiezaGrupilla/Poliigon_MetalSteelBrushed_7174_BaseColor.jpg",
-    "/blender/PiezaGrupilla/Poliigon_MetalSteelBrushed_7174_Metallic.jpg",
-    "/blender/PiezaGrupilla/Poliigon_MetalSteelBrushed_7174_Normal.png",
-    "/blender/PiezaGrupilla/Poliigon_MetalSteelBrushed_7174_Roughness.jpg",
-  ]);
-  const path = "/blender/background/";
-  const format = ".jpg";
-  const urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+class Part {
+  modelUrl: string;
+  description: string;
+  model: any;
+  background: any;
 
-  const reflectionCube = new CubeTextureLoader().load(urls);
+  constructor(modelUrl: string, description: string) {
+    this.modelUrl = modelUrl;
+    this.description = description;
+    this.model = useGLTF(this.modelUrl);
+  }
+}
 
+class BackgroundCube {
+  cubeTexture: CubeTexture;
+
+  constructor(urls: string[]) {
+    this.cubeTexture = new CubeTextureLoader().load(urls);
+  }
+}
+
+function Model({ model, background }: { model: any; background: BackgroundCube }) {
+  const { nodes } = model;
+  const [roughness] = useLoader(TextureLoader, ["/materials/steel/roughness.png"]);
   return (
-    <Center>
-      <group>
-        <mesh geometry={nodes.Cube.geometry}>
-          <meshPhysicalMaterial
-            map={colorMap}
-            metalness={0.9}
-            roughness={0.5}
-            normalMap={normalMap}
-            normalScale={[0.3, 0.3]}
-            roughnessMap={roughnessMap}
-            envMapIntensity={1}
-            clearcoat={0.1}
-            envMap={reflectionCube}
-            clearcoatRoughness={0.4}
-          />
-        </mesh>
-      </group>
-    </Center>
+    <group>
+      <mesh geometry={nodes.Cube.geometry}>
+        <meshStandardMaterial color={"#ffffff"} metalness={1} roughness={0.8} roughnessMap={roughness} envMapIntensity={0.5} envMap={background.cubeTexture} />
+      </mesh>
+    </group>
   );
 }
 
-function Scene({ children }: { children: React.ReactNode }) {
-  const lightRef = useRef<DirectionalLight>(null);
-  const { camera } = useThree();
-  useFrame(() => {
-    if (lightRef.current) {
-      const cameraPosition = camera.position.clone();
-      // Create rotation matrix for 90 degrees around Z axis
-      const rotationMatrix = new Matrix4();
-      rotationMatrix.makeRotationY(Math.PI / 2);
-      // Apply rotation to camera position vector
-      cameraPosition.applyMatrix4(rotationMatrix);
-      // Update light position
-      lightRef.current.position.copy(cameraPosition);
-    }
+function Scene({ children, isHovered }: { children: React.ReactNode; isHovered: boolean }) {
+  const cameraRef = useRef<CameraControls>(null);
+
+  const positions = [
+    new Vector3(5, 5, -5),
+    new Vector3(5, 5, -5),
+    new Vector3(5, 5, 5),
+    new Vector3(5, -5, -5),
+    new Vector3(5, -5, 5),
+    new Vector3(-5, 5, -5),
+    new Vector3(-5, 5, 5),
+    new Vector3(-5, -5, -5),
+  ];
+
+  let cameraState = new CameraState({
+    orbiting: true,
+    orbitingRadius: 10,
+    animated: true,
+    enableUserControls: false,
   });
+
+  if (isHovered) {
+    cameraState = new CameraState({
+      position: new Vector3(0, 1.5, 0),
+      target: new Vector3(0, 1.5, 0),
+      animated: true,
+      enableUserControls: true,
+    });
+  }
+
   return (
     <>
-      <directionalLight intensity={15} castShadow ref={lightRef} />
+      {Array.from({ length: positions.length }, (_, i) => (
+        <spotLight key={i} color={"#ffffff"} intensity={400} position={positions[i]} />
+      ))}
       {children}
+      <ControlledCamera state={cameraState} />
     </>
   );
 }
 
-export default function PartExpositor({ modelUrl }: { modelUrl: string }) {
+function SuspenseFallback() {
+  // TODO
+  return <p className="grow">Loading...</p>;
+}
+
+function CanvasFallback() {
+  // TODO add fallback images
+  return <p className="grow">No WebGL supported</p>;
+}
+
+export default function PartExpositor() {
+  let parts = [new Part("/blender/PiezaGrupilla/PiezaGrupilla.glb", "Pieza grupilla, parece una colilla")];
+
+  let [currentPartIndex, setCurrentPartIndex] = useState(0);
+  const [isHovered, setIsHovered] = useState(false);
+
+  const path = "/blender/background/";
+  const format = ".png";
+  let urls = [path + "px" + format, path + "nx" + format, path + "py" + format, path + "ny" + format, path + "pz" + format, path + "nz" + format];
+  let background = new BackgroundCube(urls);
+
+  const currentPart = parts[currentPartIndex];
+
   return (
-    <Canvas camera={{ position: [10, 10, 10], fov: 50 }}>
-      <Suspense fallback={null}>
-        <Scene>
-          <Model url={modelUrl} />
-        </Scene>
-      </Suspense>
-      <OrbitControls enableZoom={false} enablePan={false} />
-    </Canvas>
+    <div className="flex flex-row flex-wrap w-full h-full">
+      <div className="select-none h-[50vh] aspect-square max-w-full">
+        <Suspense fallback={<SuspenseFallback />}>
+          <ErrorBoundary fallback={<CanvasFallback />}>
+            <Canvas camera={{ position: [9, 9, 9], fov: 60 }} fallback={<CanvasFallback />} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
+              <Scene isHovered={isHovered}>
+                <Center>
+                  <Model model={currentPart.model} background={background} />
+                </Center>
+              </Scene>
+              <ArcballControls enableRotate={true} enablePan={false} enableZoom={true} minDistance={10} distance maxDistance={20} dampingFactor={10} />
+            </Canvas>
+          </ErrorBoundary>
+        </Suspense>
+      </div>
+      <div>{currentPart.description}</div>
+    </div>
   );
 }
