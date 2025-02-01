@@ -1,4 +1,4 @@
-import { CameraControls } from "@react-three/drei";
+import { ArcballControls, CameraControls } from "@react-three/drei";
 import { useFrame } from "@react-three/fiber";
 
 import { useEffect, useRef } from "react";
@@ -75,5 +75,5 @@ export function ControlledCamera({ state }: { state: CameraState }) {
     }
     cameraRef.current?.setTarget(target.x, target.y, target.z, animated);
   }
-  return <CameraControls ref={cameraRef} enabled={enableUserControls} />;
+  return true ? <ArcballControls enableRotate={true} enablePan={false} enableZoom={true} minDistance={10} maxDistance={20} dampingFactor={10} /> : <CameraControls ref={cameraRef} enabled={enableUserControls} />;
 }
