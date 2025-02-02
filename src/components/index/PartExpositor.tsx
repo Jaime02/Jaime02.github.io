@@ -1,11 +1,12 @@
 import { Suspense, useCallback, useMemo, useRef, useState, useTransition, useEffect } from "react";
-import { Canvas, useLoader } from "@react-three/fiber";
+import { Canvas, useLoader, useThree } from "@react-three/fiber";
 import { Center, useGLTF } from "@react-three/drei";
-import { TextureLoader, CubeTextureLoader, Vector3, CubeTexture, MeshStandardMaterial, Mesh } from "three";
+import { TextureLoader, CubeTextureLoader, Vector3, CubeTexture, MeshStandardMaterial, Mesh, Object3D } from "three";
 import { ErrorBoundary } from "react-error-boundary";
 import { CameraControls } from "@react-three/drei";
 import { CameraState, ControlledCamera } from "@/components/three/ControlledCamera";
 import { useSpring, animated } from "@react-spring/three";
+import { useTranslationsFromUrl } from "@/i18n/translations";
 import IconPrevious from "@/img/IconPrevious";
 import IconNext from "@/img/IconNext";
 
@@ -40,10 +41,10 @@ class Material {
     this.meshStandardMaterial = meshStandardMaterial;
   }
 
-  static Acero(background: BackgroundCube) {
+  static Steel(background: BackgroundCube) {
     const [roughness] = useLoader(TextureLoader, ["/materials/steel/roughness.png"]);
     return new Material(
-      "Acero",
+      "Steel",
       new MeshStandardMaterial({
         color: "#ffffff",
         opacity: 1,
@@ -72,6 +73,7 @@ class BackgroundCube {
     return new BackgroundCube(urls);
   }
 }
+
 function FadeableModel({ onFadeComplete, visible, part }: { onFadeComplete: () => void; visible: boolean; part: Part }) {
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<MeshStandardMaterial>(part.material.meshStandardMaterial);
@@ -100,13 +102,7 @@ function FadeableModel({ onFadeComplete, visible, part }: { onFadeComplete: () =
 
   return (
     <animated.mesh ref={meshRef} geometry={part.geometry} scale={1} visible={visible}>
-      <animated.meshStandardMaterial
-        ref={materialRef}
-        attach="material"
-        {...part.material.meshStandardMaterial}
-        opacity={opacity}
-        transparent
-      />
+      <animated.meshStandardMaterial ref={materialRef} attach="material" {...part.material.meshStandardMaterial} opacity={opacity} transparent />
     </animated.mesh>
   );
 }
@@ -139,14 +135,16 @@ function Scene({ children, isHovered }: { children: React.ReactNode; isHovered: 
     });
   }
 
+  const viewport = useThree((state) => state.viewport)
+
   return (
-    <>
+    <Center cacheKey={false} onCentered={({ container, height }: {container: Object3D, height: number}) => container.scale.setScalar(viewport.height / height)}>
       {Array.from({ length: lightPositions.length }, (_, i) => (
         <spotLight key={i} color={"#ffffff"} intensity={400} position={lightPositions[i]} />
       ))}
       {children}
       <ControlledCamera state={cameraState} />
-    </>
+    </Center>
   );
 }
 
@@ -161,11 +159,13 @@ function CanvasFallback() {
 }
 
 export default function PartExpositor() {
+  const t = useTranslationsFromUrl(new URL(window.location.href));
   let background = BackgroundCube.Estudio();
 
   let parts = [
-    new Part(useGLTF("/blender/PiezaGrupilla/PiezaGrupilla.glb"), "Pieza grupilla, parece una colilla", Material.Acero(background)),
-    new Part(useGLTF("/blender/BigMonk.glb"), "ES EL PUTO BIG BONK !!!", Material.Acero(background)),
+    new Part(useGLTF("/blender/PiezaGrupilla/PiezaGrupilla.glb"), "Pieza grupilla, parece una colilla", Material.Steel(background)),
+    new Part(useGLTF("/blender/Simetrica/Simetrica.glb"), "Shuriken ninjah primo", Material.Steel(background)),
+    new Part(useGLTF("/blender/BigMonk.glb"), "ES EL PUTO BIG BONK !!!", Material.Steel(background)),
   ];
 
   let [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -186,27 +186,31 @@ export default function PartExpositor() {
   }, []);
 
   return (
-    <div className="flex flex-row flex-wrap w-full h-full">
+    <div className="flex flex-col flex-nowrap lg:flex-row w-full h-full rounded-lg bg-gray-200">
       <Suspense fallback={<SuspenseFallback />}>
-        <div className="grid place-items-center">
+        <div className="grid place-items-center sm:h-[min(60vh,60vw)] max-sm:w-full aspect-square max-w-full rounded-lg overflow-clip">
           <IconPrevious onClick={requestChangeModel} extraClasses="row-[1] col-[1] z-1 size-8 self-center justify-self-start text-red-500" />
-          <div className="row-[1] col-[1] select-none h-[50vh] aspect-square max-w-full">
+          <div className="row-[1] col-[1] max-w-full select-none self-stretch justify-self-stretch">
             <ErrorBoundary fallback={<CanvasFallback />}>
               <Canvas camera={{ position: [9, 9, 9], fov: 60 }} fallback={<CanvasFallback />} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
                 <Scene isHovered={isHovered}>
-                  <Center>
+
                     {parts.map((part, id) => (
                       <FadeableModel key={id} part={part} visible={currentPartIndex === id} onFadeComplete={handleFadeComplete} />
                     ))}
-                  </Center>
+    
                 </Scene>
               </Canvas>
             </ErrorBoundary>
           </div>
           <IconNext onClick={requestChangeModel} extraClasses="row-[1] col-[1] z-1 size-8 self-center justify-self-end text-red-500" />
+          <div className="row-[1] col-[1] w-full h-full bg-radial from-pink-400 from-40% to-fuchsia-700"></div>
         </div>
       </Suspense>
-      <div>{currentPart.description}</div>
+      <div className="flex flex-col gap-2 p-2">
+        <h1 className="text-center">{t("index", "ourProducts")}</h1>
+        <div>{currentPart.description}</div>
+      </div>
     </div>
   );
 }
