@@ -4,7 +4,7 @@ import { getLangFromUrl, useTranslations } from "@/i18n/translations";
 import Layout from "@/layouts/Layout.astro";
 import ArrowForward from "@/img/IconArrowForward";
 import IndexCarousel from "@/components/index/IndexCarousel";
-import PartExpositor from "../../components/index/PartExpositor";
+import PartExpositor from "@/components/index/PartExpositor";
 
 const lang = getLangFromUrl(Astro.url);
 const t = useTranslations(lang);
@@ -19,20 +19,18 @@ export function getStaticPaths() {
     <div class="grow">
       <IndexCarousel client:only="react" />
     </div>
-    <div
-      class="flex text-white flex-col items-center justify-center shadow-base gap-4 p-6 bg-gradient-to-b from-[#020651] to-[#020878] rounded-2xl"
-    >
-      <h1 class="text-2xl sm:text-3xl text-center text-balance font-bold">
+    <div class="flex text-white flex-col items-center justify-center shadow-base gap-4 p-6 bg-gradient-to-b from-darkblue to-blue rounded-2xl">
+      <h1 class="text-center text-balance">
         {t("index", "title1")}<span class="text-[#3377ff] font-bold"> {t("index", "title2")}</span>{t("index", "title3")}
       </h1>
-      <div class="text-center">
-        <p class="text-left max-w-[500px] text-md sm:text-lg">
-          {t("index", "definition")}
-        </p>
-      </div>
-      <div class="flex flex-row items-baseline flex-wrap gap-4 justify-center text-xl">
+
+      <p class="text-pretty max-w-[500px] text-md sm:text-lg">
+        {t("index", "definition")}
+      </p>
+
+      <div class="flex flex-row items-baseline flex-wrap gap-5 justify-center text-xl">
         <p>{t("index", "question")}</p>
-        <a class="btn-demo pulse clickable font-bold rounded-xl px-4 py-2 sm:px-6 sm:py-4 inline-flex flex-row gap-1" href={getRelativeLocaleUrl(lang, "demo")}>
+        <a class="pulse clickable font-bold rounded-xl px-4 py-2 sm:px-6 sm:py-4 inline-flex flex-row gap-1" href={getRelativeLocaleUrl(lang, "demo")}>
           <span class="tracking-wider">{t("index", "viewDemo")} </span>
           <ArrowForward extraClasses="inline-block size-8 text-white" />
         </a>
@@ -40,6 +38,6 @@ export function getStaticPaths() {
     </div>
   </section>
   <section class="max-w-full self-center">
-    <PartExpositor client:only="react"/>
+    <PartExpositor client:only="react" />
   </section>
 </Layout>

@@ -1,4 +1,4 @@
-export default function EnglishFlag({ extraClasses }: { extraClasses: string }) {
+export default function EnglishFlag({ extraClasses }: { extraClasses?: string }) {
   return (
     <svg viewBox="0 0 60 40" className={extraClasses}>
       <defs>

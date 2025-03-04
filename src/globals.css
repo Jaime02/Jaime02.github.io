@@ -8,7 +8,7 @@
   --color-foreground: var(--theme-color-foreground);
   --color-background: var(--theme-color-background);
   --color-primary: var(--theme-color-primary);
-  --color-primary-foreground: var(--theme-color-primary);
+  --color-primary-foreground: var(--theme-color-primary-foreground);
   --color-secondary: var(--theme-color-secondary);
   --color-secondary-foreground: var(--theme-color-secondary-foreground);
   --color-accent: var(--theme-color-accent);
@@ -19,6 +19,8 @@
   --radius: 0.5rem;
   --shadow-base: var(--theme-shadow-base);
   --color-rojo-resano: #da2a1e;
+  --color-darkblue: hsl(237 95% 16%);
+  --color-blue: hsl(237 97% 24%);
 }
 
 @custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
@@ -44,7 +46,7 @@
     --theme-color-background: hsl(0 0% 3.9%);
     --theme-color-primary: hsl(237, 98%, 47%);
     --theme-color-primary-foreground: hsl(0 0% 98%);
-    --theme-color-secondary: hsl(0 0% 14.9%);
+    --theme-color-secondary: hsl(237, 100%, 66%);
     --theme-color-secondary-foreground: hsl(0 0% 98%);
     --theme-color-accent: hsl(0 0% 14.9%);
     --theme-color-destructive: hsl(0 62.8% 30.6%);
@@ -53,6 +55,10 @@
     --theme-color-input: hsl(0 0% 14.9%);
     --theme-color-ring: hsl(0 0% 83.1%);
     --theme-shadow-base: 0 0 30px 10px black;
+  }
+
+  h1 {
+    @apply text-2xl sm:text-3xl font-bold
   }
 }
 

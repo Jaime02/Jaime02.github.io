@@ -1,4 +1,4 @@
-export default function LogoResano({ extraClasses }: { extraClasses: string }) {
+export default function LogoResano({ extraClasses }: { extraClasses?: string }) {
   return (
     <svg className={extraClasses} viewBox="0 0 785 212">
       <g fill="#da2a1e">

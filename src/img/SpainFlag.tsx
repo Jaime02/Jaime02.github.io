@@ -1,4 +1,4 @@
-export default function SpainFlag({ extraClasses }: { extraClasses: string }) {
+export default function SpainFlag({ extraClasses }: { extraClasses?: string }) {
   return (
     <svg className={extraClasses} viewBox="0 0 750 500">
       <rect width="750" height="500" fill="#ad1519" />

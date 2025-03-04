@@ -35,34 +35,49 @@ const currentPage = getUrlWithoutLocale(Astro.url);
       </svg>
     </button>
     <div id="navbar-sticky" class="items-center justify-between hidden w-full md:w-auto md:flex">
-      <ul class="flex w-fit mx-auto flex-row items-center gap-4 py-2 px-4 font-medium rounded-lg dark:bg-slate-800 bg-slate-100">
-        <li>
-          <a href={getRelativeLocaleUrl(lang, "")} class={`${currentPage == "/" ? "underline decoration-primary pointer-events-none" : ""}`}>
+      <ul role="listbox" class="flex w-fit mx-auto flex-row items-center gap-4 py-2 px-4 font-medium rounded-lg dark:bg-slate-800 bg-slate-100">
+        <li role="option">
+          <a href={getRelativeLocaleUrl(lang, "")} class={`${currentPage == "/" ? "selected-a" : ""}`}>
             {t("navbar", "home")}
           </a>
         </li>
-        <li>
-          <a href={getRelativeLocaleUrl(lang, "location")} class={`${currentPage == "/location/" ? "underline decoration-primary pointer-events-none" : ""}`}>{t("navbar", "location")}</a>
+        <li role="option">
+          <a href={getRelativeLocaleUrl(lang, "location")} class={`${currentPage == "/location/" ? "selected-a" : ""}`}
+            >{t("navbar", "location")}</a
+          >
         </li>
-        <li>
-          <a href={getRelativeLocaleUrl(lang, "contact")} class={`${currentPage == "/contact/" ? "underline decoration-primary pointer-events-none" : ""}`}>{t("navbar", "contact")}</a>
+        <li role="option">
+          <a href={getRelativeLocaleUrl(lang, "contact")} class={`${currentPage == "/contact/" ? "selected-a" : ""}`}
+            >{t("navbar", "contact")}</a
+          >
         </li>
         <ThemeSelector client:only="react</a>" />
         {
           Astro.url.pathname != getRelativeLocaleUrl("es", currentPage) && (
-            <a href={getRelativeLocaleUrl("es", currentPage)}>
-              <SpainFlag extraClasses="h-6 w-auto rounded-sm" />
-            </a>
+            <li role="option">
+              <a href={getRelativeLocaleUrl("es", currentPage)}>
+                <SpainFlag extraClasses="h-6 w-auto rounded-sm" />
+              </a>
+            </li>
           )
         }
         {
           Astro.url.pathname != getRelativeLocaleUrl("en", currentPage) && (
-            <a href={getRelativeLocaleUrl("en", currentPage)}>
-              <EnglishFlag extraClasses="h-6 w-auto rounded-sm" />
-            </a>
+            <li role="option">
+              <a href={getRelativeLocaleUrl("en", currentPage)}>
+                <EnglishFlag extraClasses="h-6 w-auto rounded-sm" />
+              </a>
+            </li>
           )
         }
       </ul>
     </div>
   </div>
+  <style>
+    @reference "../../globals.css";
+
+    .selected-a {
+      @apply underline decoration-2 underline-offset-2 pointer-events-none decoration-primary dark:decoration-secondary;
+    }
+  </style>
 </nav>

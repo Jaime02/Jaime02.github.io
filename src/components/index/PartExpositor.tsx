@@ -1,10 +1,9 @@
 import { Suspense, useCallback, useMemo, useRef, useState, useTransition, useEffect } from "react";
-import { Canvas, useLoader, useThree } from "@react-three/fiber";
+import { Canvas, useLoader } from "@react-three/fiber";
 import { Center, useGLTF } from "@react-three/drei";
 import { TextureLoader, CubeTextureLoader, Vector3, CubeTexture, MeshStandardMaterial, Mesh, Object3D } from "three";
 import { ErrorBoundary } from "react-error-boundary";
-import { CameraControls } from "@react-three/drei";
-import { CameraState, ControlledCamera } from "@/components/three/ControlledCamera";
+import { CameraMovementState, CameraState, ControlledCamera } from "@/components/three/ControlledCamera";
 import { useSpring, animated } from "@react-spring/three";
 import { useTranslationsFromUrl } from "@/i18n/translations";
 import IconPrevious from "@/img/IconPrevious";
@@ -52,7 +51,24 @@ class Material {
         metalness: 1,
         roughness: 0.8,
         roughnessMap: roughness,
-        envMapIntensity: 0.5,
+        envMapIntensity: 0.4,
+        envMap: background.cubeTexture,
+      }),
+    );
+  }
+
+  static Aluminium(background: BackgroundCube) {
+    const [roughness] = useLoader(TextureLoader, ["/materials/steel/roughness.png"]);
+    return new Material(
+      "Aluminium",
+      new MeshStandardMaterial({
+        color: "#ffffff",
+        opacity: 1,
+        transparent: true,
+        metalness: 1,
+        roughness: 0.8,
+        roughnessMap: roughness,
+        envMapIntensity: 0.4,
         envMap: background.cubeTexture,
       }),
     );
@@ -74,7 +90,7 @@ class BackgroundCube {
   }
 }
 
-function FadeableModel({ onFadeComplete, visible, part }: { onFadeComplete: () => void; visible: boolean; part: Part }) {
+function FadeableModel({ visible, part }: { visible: boolean; part: Part }) {
   const meshRef = useRef<Mesh>(null);
   const materialRef = useRef<MeshStandardMaterial>(part.material.meshStandardMaterial);
 
@@ -96,20 +112,19 @@ function FadeableModel({ onFadeComplete, visible, part }: { onFadeComplete: () =
       if (!visible && meshRef.current) {
         meshRef.current.visible = false;
       }
-      onFadeComplete();
     },
   });
 
   return (
-    <animated.mesh ref={meshRef} geometry={part.geometry} scale={1} visible={visible}>
-      <animated.meshStandardMaterial ref={materialRef} attach="material" {...part.material.meshStandardMaterial} opacity={opacity} transparent />
-    </animated.mesh>
+    <Center>
+      <animated.mesh ref={meshRef} geometry={part.geometry} scale={1} visible={visible}>
+        <animated.meshStandardMaterial ref={materialRef} attach="material" {...part.material.meshStandardMaterial} opacity={opacity} transparent />
+      </animated.mesh>
+    </Center>
   );
 }
 
 function Scene({ children, isHovered }: { children: React.ReactNode; isHovered: boolean }) {
-  const cameraRef = useRef<CameraControls>(null);
-
   const lightPositions = [
     new Vector3(5, 5, -5),
     new Vector3(5, 5, -5),
@@ -121,30 +136,21 @@ function Scene({ children, isHovered }: { children: React.ReactNode; isHovered: 
     new Vector3(-5, -5, -5),
   ];
 
-  let cameraState = new CameraState({
-    orbiting: true,
-    orbitingRadius: 10,
+  const cameraState = new CameraState({
+    movementState: isHovered ? CameraMovementState.Draggable : CameraMovementState.Orbiting,
+    orbitingRadius: isHovered ? 3 : 5, // Adjust radius based on hover
     animated: true,
-    enableUserControls: false,
+    minDistance: isHovered ? 3 : 2, // Different constraints for each state
+    maxDistance: isHovered ? 6 : 8,
   });
-
-  if (isHovered) {
-    cameraState = new CameraState({
-      animated: true,
-      enableUserControls: true,
-    });
-  }
-
-  const viewport = useThree((state) => state.viewport)
-
   return (
-    <Center cacheKey={false} onCentered={({ container, height }: {container: Object3D, height: number}) => container.scale.setScalar(viewport.height / height)}>
+    <>
       {Array.from({ length: lightPositions.length }, (_, i) => (
-        <spotLight key={i} color={"#ffffff"} intensity={400} position={lightPositions[i]} />
+        <spotLight key={i} color={"#ffffff"} intensity={200} position={lightPositions[i]} />
       ))}
       {children}
       <ControlledCamera state={cameraState} />
-    </Center>
+    </>
   );
 }
 
@@ -164,12 +170,37 @@ export default function PartExpositor() {
 
   let parts = [
     new Part(useGLTF("/blender/PiezaGrupilla/PiezaGrupilla.glb"), "Pieza grupilla, parece una colilla", Material.Steel(background)),
-    new Part(useGLTF("/blender/Simetrica/Simetrica.glb"), "Shuriken ninjah primo", Material.Steel(background)),
+    new Part(useGLTF("/blender/Simetrica/Simetrica.glb"), "Shuriken ninjah primo", Material.Aluminium(background)),
     new Part(useGLTF("/blender/BigMonk.glb"), "ES EL PUTO BIG BONK !!!", Material.Steel(background)),
   ];
 
   let [currentPartIndex, setCurrentPartIndex] = useState(0);
   const [isHovered, setIsHovered] = useState(false);
+  const [delayedHover, setDelayedHover] = useState(false);
+  const hoverTimeoutRef = useRef<NodeJS.Timeout>(null);
+
+  useEffect(() => {
+    if (isHovered) {
+      // Clear any existing timeout when hovering
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+      setDelayedHover(true);
+    } else {
+      // Set a timeout for hover out
+      hoverTimeoutRef.current = setTimeout(() => {
+        setDelayedHover(false);
+      }, 3000); // 3 seconds delay
+    }
+
+    // Cleanup timeout on component unmount
+    return () => {
+      if (hoverTimeoutRef.current) {
+        clearTimeout(hoverTimeoutRef.current);
+      }
+    };
+  }, [isHovered]);
+
   const [isPending, startTransition] = useTransition();
 
   const currentPart = useMemo(() => parts[currentPartIndex], [parts, currentPartIndex]);
@@ -181,34 +212,38 @@ export default function PartExpositor() {
     }
   }, [parts, isPending]);
 
-  const handleFadeComplete = useCallback(() => {
-    // Optional: Add any cleanup or additional logic after fade
-  }, []);
-
   return (
-    <div className="flex flex-col flex-nowrap lg:flex-row w-full h-full rounded-lg bg-gray-200">
+    <div className="flex flex-col lg:flex-row w-full h-full rounded-lg bg-gray-200 p-4 justify-center">
       <Suspense fallback={<SuspenseFallback />}>
-        <div className="grid place-items-center sm:h-[min(60vh,60vw)] max-sm:w-full aspect-square max-w-full rounded-lg overflow-clip">
-          <IconPrevious onClick={requestChangeModel} extraClasses="row-[1] col-[1] z-1 size-8 self-center justify-self-start text-red-500" />
-          <div className="row-[1] col-[1] max-w-full select-none self-stretch justify-self-stretch">
+        <div className="grid place-items-center sm:h-[min(60vh,60vw)] min-w-0 max-sm:w-full aspect-square max-w-full rounded-lg overflow-clip">
+          <button onClick={requestChangeModel} className="row-[1] col-[1] z-1 size-8 self-center justify-self-start text-white clickable">
+            <IconPrevious extraClasses="w-full h-full" />
+          </button>
+          <div className="row-[1] col-[1] min-w-0 min-h-0 max-w-full max-h-full select-none self-stretch justify-self-stretch">
             <ErrorBoundary fallback={<CanvasFallback />}>
-              <Canvas camera={{ position: [9, 9, 9], fov: 60 }} fallback={<CanvasFallback />} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
-                <Scene isHovered={isHovered}>
-
-                    {parts.map((part, id) => (
-                      <FadeableModel key={id} part={part} visible={currentPartIndex === id} onFadeComplete={handleFadeComplete} />
-                    ))}
-    
+              <Canvas
+                className="object-contain"
+                camera={{ position: [4, 4, 4], fov: 60 }}
+                fallback={<CanvasFallback />}
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+              >
+                <Scene isHovered={delayedHover}>
+                  {parts.map((part, id) => (
+                    <FadeableModel key={id} part={part} visible={currentPartIndex === id} />
+                  ))}
                 </Scene>
               </Canvas>
             </ErrorBoundary>
           </div>
-          <IconNext onClick={requestChangeModel} extraClasses="row-[1] col-[1] z-1 size-8 self-center justify-self-end text-red-500" />
-          <div className="row-[1] col-[1] w-full h-full bg-radial from-pink-400 from-40% to-fuchsia-700"></div>
+          <button onClick={requestChangeModel} className="row-[1] col-[1] z-1 size-8 self-center justify-self-end clickable text-white">
+            <IconNext extraClasses="w-full h-full" />
+          </button>
+          <div className="row-[1] col-[1] w-full h-full bg-radial from-blue from-40% to-darkblue"></div>
         </div>
       </Suspense>
       <div className="flex flex-col gap-2 p-2">
-        <h1 className="text-center">{t("index", "ourProducts")}</h1>
+        <h1 className="text-center text-nowrap">{t("index", "ourProducts")}</h1>
         <div>{currentPart.description}</div>
       </div>
     </div>

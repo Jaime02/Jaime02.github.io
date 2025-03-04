@@ -1,0 +1,11 @@
+---
+import Scene from "@/components/test";
+import Layout from "@/layouts/Layout.astro";
+
+export function getStaticPaths() {
+  return [{ params: { lang: undefined } }, { params: { lang: "en" } }, { params: { lang: "es" } }];
+}
+---
+<Layout>
+  <Scene client:only="react"  />
+</Layout>

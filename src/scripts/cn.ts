@@ -1,5 +1,5 @@
 import { twMerge } from "tailwind-merge";
 
-export default function cn(...classes: string[]) {
+export default function cn(...classes: (string | undefined)[]) {
   return twMerge(classes);
 }
