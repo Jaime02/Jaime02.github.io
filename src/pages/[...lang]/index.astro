@@ -15,7 +15,7 @@ export function getStaticPaths() {
 ---
 
 <Layout>
-  <section class="flex flex-row gap-6 p-4 sm:p-6 flex-wrap xl:flex-nowrap items-center justify-center">
+  <section class="flex flex-row gap-6 flex-wrap xl:flex-nowrap items-center justify-center">
     <div class="grow">
       <IndexCarousel client:only="react" />
     </div>
@@ -23,15 +23,13 @@ export function getStaticPaths() {
       <h1 class="text-center text-balance">
         {t("index", "title1")}<span class="text-[#3377ff] font-bold"> {t("index", "title2")}</span>{t("index", "title3")}
       </h1>
-
-      <p class="text-pretty max-w-[500px] text-md sm:text-lg">
+      <q class="text-pretty max-w-[500px] text-md sm:text-lg">
         {t("index", "definition")}
-      </p>
-
+      </q>
       <div class="flex flex-row items-baseline flex-wrap gap-5 justify-center text-xl">
         <p>{t("index", "question")}</p>
         <a class="pulse clickable font-bold rounded-xl px-4 py-2 sm:px-6 sm:py-4 inline-flex flex-row gap-1" href={getRelativeLocaleUrl(lang, "demo")}>
-          <span class="tracking-wider">{t("index", "viewDemo")} </span>
+          <span class="tracking-wider text-2xl">{t("index", "viewDemo")} </span>
           <ArrowForward extraClasses="inline-block size-8 text-white" />
         </a>
       </div>

@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useMemo, useRef, useState, useTransition, useEffect } from "react";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { Center, useGLTF } from "@react-three/drei";
+import { useGLTF } from "@react-three/drei";
 import { TextureLoader, CubeTextureLoader, Vector3, CubeTexture, MeshStandardMaterial, Mesh, Object3D } from "three";
 import { ErrorBoundary } from "react-error-boundary";
 import { CameraMovementState, CameraState, ControlledCamera } from "@/components/three/ControlledCamera";
@@ -49,7 +49,7 @@ class Material {
         opacity: 1,
         transparent: true,
         metalness: 1,
-        roughness: 0.8,
+        roughness: 0.7,
         roughnessMap: roughness,
         envMapIntensity: 0.4,
         envMap: background.cubeTexture,
@@ -66,7 +66,7 @@ class Material {
         opacity: 1,
         transparent: true,
         metalness: 1,
-        roughness: 0.8,
+        roughness: 0.9,
         roughnessMap: roughness,
         envMapIntensity: 0.4,
         envMap: background.cubeTexture,
@@ -102,7 +102,7 @@ function FadeableModel({ visible, part }: { visible: boolean; part: Part }) {
 
   const { opacity } = useSpring({
     opacity: visible ? 1 : 0,
-    config: { duration: 1000 },
+    config: { duration: 500 },
     onChange: ({ value }) => {
       if (materialRef.current) {
         materialRef.current.opacity = value.opacity;
@@ -116,11 +116,9 @@ function FadeableModel({ visible, part }: { visible: boolean; part: Part }) {
   });
 
   return (
-    <Center>
-      <animated.mesh ref={meshRef} geometry={part.geometry} scale={1} visible={visible}>
-        <animated.meshStandardMaterial ref={materialRef} attach="material" {...part.material.meshStandardMaterial} opacity={opacity} transparent />
-      </animated.mesh>
-    </Center>
+    <animated.mesh ref={meshRef} geometry={part.geometry} scale={1} visible={visible}>
+      <animated.meshStandardMaterial ref={materialRef} attach="material" {...part.material.meshStandardMaterial} opacity={opacity} transparent />
+    </animated.mesh>
   );
 }
 
@@ -138,10 +136,10 @@ function Scene({ children, isHovered }: { children: React.ReactNode; isHovered: 
 
   const cameraState = new CameraState({
     movementState: isHovered ? CameraMovementState.Draggable : CameraMovementState.Orbiting,
-    orbitingRadius: isHovered ? 3 : 5, // Adjust radius based on hover
+    orbitingRadius: 4,
     animated: true,
-    minDistance: isHovered ? 3 : 2, // Different constraints for each state
-    maxDistance: isHovered ? 6 : 8,
+    minDistance: 4,
+    maxDistance: 8,
   });
   return (
     <>
@@ -169,9 +167,8 @@ export default function PartExpositor() {
   let background = BackgroundCube.Estudio();
 
   let parts = [
-    new Part(useGLTF("/blender/PiezaGrupilla/PiezaGrupilla.glb"), "Pieza grupilla, parece una colilla", Material.Steel(background)),
-    new Part(useGLTF("/blender/Simetrica/Simetrica.glb"), "Shuriken ninjah primo", Material.Aluminium(background)),
-    new Part(useGLTF("/blender/BigMonk.glb"), "ES EL PUTO BIG BONK !!!", Material.Steel(background)),
+    new Part(useGLTF("/blender/PiezaGrupilla/PiezaGrupilla.glb"), "", Material.Steel(background)),
+    new Part(useGLTF("/blender/Simetrica/Simetrica.glb"), "", Material.Aluminium(background)),
   ];
 
   let [currentPartIndex, setCurrentPartIndex] = useState(0);
@@ -181,19 +178,16 @@ export default function PartExpositor() {
 
   useEffect(() => {
     if (isHovered) {
-      // Clear any existing timeout when hovering
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
       }
       setDelayedHover(true);
     } else {
-      // Set a timeout for hover out
       hoverTimeoutRef.current = setTimeout(() => {
         setDelayedHover(false);
-      }, 3000); // 3 seconds delay
+      }, 3000);
     }
 
-    // Cleanup timeout on component unmount
     return () => {
       if (hoverTimeoutRef.current) {
         clearTimeout(hoverTimeoutRef.current);
@@ -221,13 +215,7 @@ export default function PartExpositor() {
           </button>
           <div className="row-[1] col-[1] min-w-0 min-h-0 max-w-full max-h-full select-none self-stretch justify-self-stretch">
             <ErrorBoundary fallback={<CanvasFallback />}>
-              <Canvas
-                className="object-contain"
-                camera={{ position: [4, 4, 4], fov: 60 }}
-                fallback={<CanvasFallback />}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
+              <Canvas className="object-contain" fallback={<CanvasFallback />} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)}>
                 <Scene isHovered={delayedHover}>
                   {parts.map((part, id) => (
                     <FadeableModel key={id} part={part} visible={currentPartIndex === id} />
